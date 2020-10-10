@@ -14,3 +14,14 @@ def plot(data):
     plt.ylabel('feature 2', size=15, labelpad=10)
     plt.tight_layout()
     plt.show()
+
+
+def plot_cluster(data, labels):
+    plt.figure(figsize=(8, 6))
+    plt.scatter(data['feat-1'], data['feat-2'], alpha=0.8, s=3, c=labels, cmap='Set2')
+    plt.xticks([])
+    plt.yticks([])
+    plt.xlabel('feature 1', size=15, labelpad=10)
+    plt.ylabel('feature 2', size=15, labelpad=10)
+    plt.tight_layout()
+    plt.show()

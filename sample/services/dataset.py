@@ -13,7 +13,6 @@ def load():
 def load_file(filename):
     col_names = ['feat-1', 'feat-2', 'labels']
     data = pd.read_csv(source_location + filename, names=col_names)
-    columns = ['feat-1', 'feat-2']
     # col_names.remove('index')
     # data = data[col_names]
     data = data.astype({'labels': 'int32'})
