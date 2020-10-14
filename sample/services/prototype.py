@@ -24,10 +24,6 @@ _, nbh_indices_lrd = lrd_filter(nbh_distance=nbh_distances, nbh_indices=nbh_indi
 _, nbh_indices_gauss = gauss_sample(nbh_distance=nbh_distances, nbh_indices=nbh_indices, alpha=1, power=1,
                                     draw_n_samples=300, weight_dist=30)
 
-
-
-
-
 labels = db.labels_
 unique_labels = np.unique(labels)
 print(unique_labels)

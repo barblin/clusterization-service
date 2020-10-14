@@ -1,14 +1,16 @@
 from flask import Flask
+
+from sample.models.SatterPlotResponse import ScatterPlotResponse
+from sample.services import cluster
 from sample.services import dataset
 from sample.services import plot
-from sample.services import cluster
 
 app = Flask(__name__)
 
 
 @app.route('/api/v1/version')
 def version():
-    return '1.0.0'
+    return '0.0.1'
 
 
 @app.route('/api/v1/clusters/data')
@@ -18,7 +20,7 @@ def cluster_data():
 
 @app.route('/api/v1/clusters/data/files/<filename>')
 def cluster_data_for_file(filename):
-    return dataset.load_file(filename).to_json()
+    return ScatterPlotResponse(cluster.compute_clusters(filename)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')
@@ -31,6 +33,13 @@ def plot_file(filename):
 def plot_cluster(filename):
     cluster.plot_clusters(filename)
     return 'cluster plotting finished'
+
+
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 app.run(debug=True)

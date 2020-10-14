@@ -16,9 +16,9 @@ def plot(data):
     plt.show()
 
 
-def plot_cluster(data, labels):
+def plot_cluster(scat_plot):
     plt.figure(figsize=(8, 6))
-    plt.scatter(data['feat-1'], data['feat-2'], alpha=0.8, s=3, c=labels, cmap='Set2')
+    plt.scatter(scat_plot.data['feat-1'], scat_plot.data['feat-2'], alpha=0.8, s=3, c=scat_plot.labels, cmap='Set2')
     plt.xticks([])
     plt.yticks([])
     plt.xlabel('feature 1', size=15, labelpad=10)
