@@ -6,6 +6,10 @@ source_location = dir_path + '/../../ressources/syntheticData/'
 default_file = 'waveData_5.csv'
 
 
+def files():
+    return os.listdir(source_location)
+
+
 def load():
     return load_file(default_file)
 

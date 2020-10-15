@@ -29,12 +29,14 @@ Start virtual environment
 ```
 venv\Scripts\activate
 ```
-Then do stuff :D
+Then you can install the packages you need in your environment
 
 
 # Current supported api
 ```
 /api/v1/version
+
+/api/v1/files
 
 /api/v1/clusters/data
 
@@ -42,7 +44,7 @@ Then do stuff :D
 
 /api/v1/plots/files/<filename>
 
-/api/v1/plots/clusters/<filename>
+/api/v1/plots/clusters/files/<filename>
 ```
 
 Example: http://localhost:5000/api/v1/version

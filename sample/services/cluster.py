@@ -1,5 +1,5 @@
-from sample.services import dataset
-from sample.services import find_neighbours
+from sample.services import datasource
+from sample.services import neighbour_selector
 from sample.services import plot
 from sample.services.wasserstein_distance import distances
 from sklearn.cluster import DBSCAN  # DBSCAN gives us "wasserstein" connected points
@@ -12,8 +12,8 @@ def plot_clusters(filename):
 
 
 def compute_clusters(filename):
-    data = dataset.load_file(filename)
-    nbs = find_neighbours.execute(data)
+    data = datasource.load_file(filename)
+    nbs = neighbour_selector.execute(data)
     dist_mtrx = distances(nbs)
     db = DBSCAN(metric="precomputed", eps=0.5, min_samples=50).fit(dist_mtrx)
 
