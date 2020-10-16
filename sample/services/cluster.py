@@ -1,9 +1,9 @@
 from sample.services import datasource
 from sample.services import neighbour_selector
-from sample.services import plot
+from sample.plotting import plot
 from sample.services.wasserstein_distance import distances
 from sklearn.cluster import DBSCAN  # DBSCAN gives us "wasserstein" connected points
-from sample.models.ScatterPlot import ScatterPlot
+from sample.models.scatter_plot import ScatterPlot
 import numpy as np
 
 

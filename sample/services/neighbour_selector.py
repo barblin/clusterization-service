@@ -1,5 +1,5 @@
 from sklearn.neighbors import NearestNeighbors
-from sample.models.NeighbourData import NeighbourData
+from sample.models.neighbour_data import NeighbourData
 
 columns = ['feat-1', 'feat-2']
 

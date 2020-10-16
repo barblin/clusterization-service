@@ -33,15 +33,27 @@ Then you can install the packages you need in your environment
 
 
 # Current supported api
+
+## Configuration endpoints
 ```
 /api/v1/version
 
 /api/v1/files
 
-/api/v1/clusters/data
+/api/v1/views
+```
 
-/api/v1/clusters/data/files/<filename>
+## File viewer endpoints
+```
+/api/v1/views/clusters/files/<filename>
 
+/api/v1/views/simple-plots/files/<filename>
+
+/api/v1/views/delaunay-triangulation/files/<filename>
+```
+
+## Plotting endpoints
+```
 /api/v1/plots/files/<filename>
 
 /api/v1/plots/clusters/files/<filename>

@@ -1,10 +1,12 @@
+import json
+
 from flask import Flask
 
-from sample.api.ScatterPlotResponse import ScatterPlotResponse
+from sample.api.scatter_plot_response import ScatterPlotResponse
+from sample.models.config import SUPPORTED_VIEWS
+from sample.plotting import plot
 from sample.services import cluster
 from sample.services import datasource
-from sample.services import plot
-import json
 
 app = Flask(__name__)
 
@@ -19,14 +21,24 @@ def get_files():
     return json.dumps(datasource.files())
 
 
-@app.route('/api/v1/clusters/data')
-def cluster_data():
-    return datasource.load().to_json()
+@app.route('/api/v1/views')
+def get_views():
+    return json.dumps(SUPPORTED_VIEWS)
 
 
-@app.route('/api/v1/clusters/data/files/<filename>')
+@app.route('/api/v1/views/clusters/files/<filename>')
 def cluster_data_for_file(filename):
     return ScatterPlotResponse(cluster.compute_clusters(filename)).jsonify()
+
+
+@app.route('/api/v1/views/simple-plots/files/<filename>')
+def simple_plot_data_for_file(filename):
+    return ScatterPlotResponse(datasource.load_scatter_plot(filename)).jsonify()
+
+
+@app.route('/api/v1/views/delaunay-triangulation/files/<filename>')
+def delaunay_triangulation_data_for_file(filename):
+    return ScatterPlotResponse(datasource.load_scatter_plot(filename)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')

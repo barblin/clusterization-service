@@ -1,4 +1,5 @@
 import pandas as pd
+from sample.models.scatter_plot import ScatterPlot
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -12,6 +13,11 @@ def files():
 
 def load():
     return load_file(default_file)
+
+
+def load_scatter_plot(filename):
+    data = load_file(filename)
+    return ScatterPlot(data, data['labels'])
 
 
 def load_file(filename):
