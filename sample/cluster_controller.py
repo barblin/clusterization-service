@@ -3,10 +3,12 @@ import json
 from flask import Flask
 
 from sample.api.scatter_plot_response import ScatterPlotResponse
+from sample.api.delaunay_plot_response import DelaunayPlotResponse
 from sample.models.config import SUPPORTED_VIEWS
 from sample.plotting import plot
 from sample.services import cluster
 from sample.services import datasource
+from sample.services.delaunay_triangulation import triangulate
 
 app = Flask(__name__)
 
@@ -38,7 +40,7 @@ def simple_plot_data_for_file(filename):
 
 @app.route('/api/v1/views/delaunay-triangulation/files/<filename>')
 def delaunay_triangulation_data_for_file(filename):
-    return ScatterPlotResponse(datasource.load_scatter_plot(filename)).jsonify()
+    return DelaunayPlotResponse(triangulate(filename)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')

@@ -1,5 +1,5 @@
 import pandas as pd
-from sample.models.scatter_plot import ScatterPlot
+from sample.models.plots import ScatterPlot
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
