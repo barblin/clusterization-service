@@ -26,5 +26,4 @@ def load_file(filename):
     # col_names.remove('index')
     # data = data[col_names]
     data = data.astype({'labels': 'int32'})
-    print(data.shape)
     return data
