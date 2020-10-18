@@ -34,7 +34,7 @@ Then you can install the packages you need in your environment
 
 # Current supported api
 
-## Configuration endpoints
+### Configuration endpoints
 ```
 /api/v1/version
 
@@ -43,16 +43,18 @@ Then you can install the packages you need in your environment
 /api/v1/views
 ```
 
-## File viewer endpoints
+### File viewer endpoints to execute a specific algorithm for different views of data from files
 ```
 /api/v1/views/clusters/files/<filename>
 
 /api/v1/views/simple-plots/files/<filename>
 
 /api/v1/views/delaunay-triangulation/files/<filename>
+
+/api/v1/views/minimum-spanning-tree/files/<filename>
 ```
 
-## Plotting endpoints
+### Plotting endpoints to plot server side matplot lib plots
 ```
 /api/v1/plots/files/<filename>
 

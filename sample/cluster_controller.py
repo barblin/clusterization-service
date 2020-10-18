@@ -4,11 +4,13 @@ from flask import Flask
 
 from sample.api.scatter_plot_response import ScatterPlotResponse
 from sample.api.delaunay_plot_response import DelaunayPlotResponse
+from sample.api.minimum_tree_response import MinimumTreeResponse
 from sample.models.config import SUPPORTED_VIEWS
 from sample.plotting import plot
 from sample.services import cluster
 from sample.services import datasource
 from sample.services.delaunay_triangulation import triangulate
+from sample.services.minimum_spanning_tree import create
 
 app = Flask(__name__)
 
@@ -41,6 +43,11 @@ def simple_plot_data_for_file(filename):
 @app.route('/api/v1/views/delaunay-triangulation/files/<filename>')
 def delaunay_triangulation_data_for_file(filename):
     return DelaunayPlotResponse(triangulate(filename)).jsonify()
+
+
+@app.route('/api/v1/views/minimum-spanning-tree/files/<filename>')
+def minimum_spanning_tree_for_file(filename):
+    return MinimumTreeResponse(create(filename)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')

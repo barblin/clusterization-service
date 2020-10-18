@@ -1,15 +1,18 @@
 from scipy.spatial import Delaunay
 from sample.services import datasource
 from sample.models.plots import TriPlot
+from sample.services.datasource import data_without_labels
 
 
 def triangulate(filename):
     df = datasource.load_file(filename)
-    del df['labels']
-    point_array = df.to_numpy()
+    point_array = data_without_labels(df)
 
-    tri = Delaunay(point_array)
+    return TriPlot(df, triangulation_data(point_array))
 
+
+def triangulation_data(point_array):
+    tri = triangulate_delaunay(point_array)
     data = []
     for entries in tri.simplices:
         row = []
@@ -17,4 +20,8 @@ def triangulate(filename):
             row.append(point_array[entry].tolist())
         data.append(row)
 
-    return TriPlot(df, data)
+    return data
+
+
+def triangulate_delaunay(point_array):
+    return Delaunay(point_array)

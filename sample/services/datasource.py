@@ -20,6 +20,11 @@ def load_scatter_plot(filename):
     return ScatterPlot(data, data['labels'])
 
 
+def data_without_labels(df):
+    del df['labels']
+    return df.to_numpy()
+
+
 def load_file(filename):
     col_names = ['feat-1', 'feat-2', 'labels']
     data = pd.read_csv(source_location + filename, names=col_names)
