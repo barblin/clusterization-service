@@ -1,13 +1,13 @@
-from sample.models.cluster_tree import WassersteinDistanceTree, Edge
+from sample.models.cluster_tree import DistanceTree, Edge
 from sample.services.datasource import load_file, data_without_labels
 from sample.services.delaunay_triangulation import triangulate_delaunay
 from sample.services.linear_algebra import two_d_distance
 
 
-def create(filename):
+def create(filename, distance):
     point_array = data_without_labels(load_file(filename))
     tri = triangulate_delaunay(point_array)
-    tree = WassersteinDistanceTree(len(tri.simplices) * 3)
+    tree = DistanceTree(len(tri.simplices) * 3)
 
     for entries in tri.simplices:
         row = []
@@ -26,4 +26,4 @@ def create(filename):
         tree.add_edge(edge2)
         tree.add_edge(edge3)
 
-    return tree.minimum_tree()
+    return tree.minimum_tree(distance)

@@ -1,11 +1,11 @@
 import unittest
-from sample.models.cluster_tree import WassersteinDistanceTree
+from sample.models.cluster_tree import DistanceTree
 from sample.models.cluster_tree import Edge
 
 
 class MyTestCase(unittest.TestCase):
     def test_tree_is_sorted_in_right_order(self):
-        tree = WassersteinDistanceTree(3)
+        tree = DistanceTree(3)
         edge1 = Edge(1, 2, 10)
         edge2 = Edge(2, 1, 4)
         edge3 = Edge(2, 3, 1)
