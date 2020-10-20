@@ -10,8 +10,9 @@ from sample.models.config import SUPPORTED_VIEWS
 from sample.plotting import plot
 from sample.services import cluster
 from sample.services import datasource
-from sample.services.delaunay_triangulation import triangulate
-from sample.services.minimum_spanning_tree import create
+from sample.services.delaunay_triangulation import triangulation_plot
+from sample.services.minimum_spanning_tree import create_min_tree, cluster_min_tree
+from sample.api.min_tree_wasser_scatter_plot import MinTreeWasserScatterPlot
 
 app = Flask(__name__)
 
@@ -43,17 +44,22 @@ def simple_plot_data_for_file(filename):
 
 @app.route('/api/v1/views/delaunay-triangulation/files/<filename>')
 def delaunay_triangulation_data_for_file(filename):
-    return DelaunayPlotResponse(triangulate(filename)).jsonify()
+    return DelaunayPlotResponse(triangulation_plot(filename)).jsonify()
 
 
 @app.route('/api/v1/views/minimum-spanning-tree/files/<filename>')
 def minimum_spanning_tree_for_file(filename):
-    return MinimumTreeResponse(create(filename, Distance.DIRECT)).jsonify()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.DIRECT)).jsonify()
 
 
 @app.route('/api/v1/views/minimum-spanning-tree-wasser/files/<filename>')
 def minimum_spanning_tree_wasser_for_file(filename):
-    return MinimumTreeResponse(create(filename, Distance.WASSER)).jsonify()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER)).jsonify()
+
+
+@app.route('/api/v1/views/clusters-min-tree-wasser/files/<filename>')
+def clusters_min_tree_wasser_for_file(filename):
+    return MinTreeWasserScatterPlot(cluster_min_tree(filename)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')

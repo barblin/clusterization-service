@@ -1,13 +1,6 @@
 import json
 
 
-class Dot:
-    def __init__(self, x, y, color):
-        self.x = x
-        self.y = y
-        self.color = color
-
-
 class ScatterPlotResponse:
     def __init__(self, scatter_plot):
         self.data = []

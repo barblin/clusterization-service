@@ -1,29 +1,71 @@
-from sample.models.cluster_tree import DistanceTree, Edge
-from sample.services.datasource import load_file, data_without_labels
-from sample.services.delaunay_triangulation import triangulate_delaunay
-from sample.services.linear_algebra import two_d_distance
+from sample.models.cluster_tree import Distance
+from sample.models.plots import MinTreeWasserClusterPlot
+from sample.models.tree_factory import create_tree
+from sample.models.union_find import UnionFind
+from sample.services import datasource
 
 
-def create(filename, distance):
-    point_array = data_without_labels(load_file(filename))
-    tri = triangulate_delaunay(point_array)
-    tree = DistanceTree(len(tri.simplices) * 3)
+def create_min_tree(filename, distance):
+    tree = create_tree(filename)
+    return __minimum_tree(distance, tree)
 
-    for entries in tri.simplices:
-        row = []
-        for entry in entries:
-            row.append(point_array[entry].tolist())
 
-        dist1 = two_d_distance(row[0][0], row[0][1], row[1][0], row[1][1])
-        dist2 = two_d_distance(row[0][0], row[0][1], row[2][0], row[2][1])
-        dist3 = two_d_distance(row[1][0], row[1][1], row[2][0], row[2][1])
+def cluster_min_tree(filename):
+    data_frame = datasource.load_file(filename)
+    tree = create_tree(filename)
+    return MinTreeWasserClusterPlot(data_frame, __wasser_vertex_union(tree))
 
-        edge1 = Edge(entries[0], entries[1], dist1, row[0], row[1])
-        edge2 = Edge(entries[0], entries[2], dist2, row[0], row[2])
-        edge3 = Edge(entries[1], entries[2], dist3, row[1], row[2])
 
-        tree.add_edge(edge1)
-        tree.add_edge(edge2)
-        tree.add_edge(edge3)
+def __wasser_vertex_union(tree):
+    union_find = UnionFind(tree.number_vertices)
+    tree.calc_wasser_dist()
+    tree.sort()
 
-    return tree.minimum_tree(distance)
+    for edge in tree.edges:
+        if union_find.num_components <= 6:
+            break
+
+        if not union_find.connected(edge.src, edge.dest):
+            union_find.unify(edge.src, edge.dest)
+
+    return union_find
+
+
+def __minimum_tree(distance, tree):
+    if distance is Distance.WASSER:
+        return __minimum_wasser_tree(tree, UnionFind(tree.number_vertices))
+    else:
+        return __minimum_eucledian_tree(tree, UnionFind(tree.number_vertices))
+
+
+def __minimum_eucledian_tree(tree, union_find):
+    tree.sort()
+
+    minimum_edges = []
+
+    for edge in tree.edges:
+        if union_find.num_components <= 6:
+            break
+
+        if not union_find.connected(edge.src, edge.dest):
+            minimum_edges.append(edge)
+            union_find.unify(edge.src, edge.dest)
+
+    return minimum_edges
+
+
+def __minimum_wasser_tree(tree, union_find):
+    tree.calc_wasser_dist()
+    tree.wasser_sort()
+
+    minimum_edges = []
+
+    for edge in tree.edges:
+        if tree.average_wasser_dist < edge.wasser_cost:
+            break
+
+        if not union_find.connected(edge.src, edge.dest):
+            minimum_edges.append(edge)
+            union_find.unify(edge.src, edge.dest)
+
+    return minimum_edges

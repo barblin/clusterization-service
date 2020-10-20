@@ -12,9 +12,9 @@ class UnionFind:
             self.sz[i] = 1
 
     def connected(self, p, q):
-        return self.find(p) == self.find(q)
+        return self.find_root_elem(p) == self.find_root_elem(q)
 
-    def find(self, p):
+    def find_root_elem(self, p):
         root = p
         while root != self.id[root]:
             root = self.id[root]
@@ -27,8 +27,8 @@ class UnionFind:
         return root
 
     def unify(self, p, q):
-        root1 = self.find(p)
-        root2 = self.find(q)
+        root1 = self.find_root_elem(p)
+        root2 = self.find_root_elem(q)
 
         if root1 == root2:
             return
@@ -39,3 +39,5 @@ class UnionFind:
         else:
             self.sz[root1] += self.sz[root2]
             self.id[root2] = root1
+
+        self.num_components -= 1

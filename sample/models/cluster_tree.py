@@ -1,5 +1,4 @@
 from scipy.stats import wasserstein_distance
-
 from sample.models.union_find import UnionFind
 from enum import Enum
 
@@ -7,6 +6,12 @@ from enum import Enum
 class Distance(Enum):
     WASSER = "wasser"
     DIRECT = "direct"
+
+
+class Vertex:
+    def __init__(self, coords):
+        self.coords = coords
+        self.label = -1
 
 
 class Edge:
@@ -24,6 +29,7 @@ class DistanceTree:
         self.edges = []
         self.neighbours = {}
         self.number_vertices = vertices
+        self.average_wasser_dist = 0
 
     def add_edge(self, edge):
         self.edges.append(edge)
@@ -45,25 +51,9 @@ class DistanceTree:
         self.edges.sort(key=lambda x: x.wasser_cost)
 
     def calc_wasser_dist(self):
+        sum_wasser_dist = 0
         for edge in self.edges:
             edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
+            sum_wasser_dist += edge.wasser_cost
 
-    def minimum_tree(self, distance):
-        if distance is Distance.WASSER:
-            self.calc_wasser_dist()
-            self.wasser_sort()
-            print("Hallo Wasser")
-        else:
-            self.sort()
-            print("Hallo Dist")
-
-        union_find = UnionFind(self.number_vertices)
-
-        minimum_edges = []
-
-        for edge in self.edges:
-            if not union_find.connected(edge.src, edge.dest):
-                minimum_edges.append(edge)
-                union_find.unify(edge.src, edge.dest)
-
-        return minimum_edges
+        self.average_wasser_dist = sum_wasser_dist/len(self.edges)*0.5
