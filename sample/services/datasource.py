@@ -30,7 +30,6 @@ def data_without_labels(df):
 
 def load_file(filename):
     if filename in cached_files.keys():
-        print("cache hit")
         return cached_files[filename]
 
     col_names = ['feat-1', 'feat-2', 'labels']

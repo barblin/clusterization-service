@@ -2,49 +2,32 @@ from sample.models.cluster_tree import Distance
 from sample.models.plots import MinTreeWasserClusterPlot
 from sample.models.tree_factory import create_tree
 from sample.models.union_find import UnionFind
-from sample.services import datasource
 
 
-def create_min_tree(filename, distance):
+def create_min_tree(filename, distance, filters):
     tree = create_tree(filename)
-    return __minimum_tree(distance, tree)
+    return __minimum_tree(distance, tree, filters)
 
 
-def cluster_min_tree(filename):
-    data_frame = datasource.load_file(filename)
+def cluster_min_tree(filename, filters):
     tree = create_tree(filename)
-    return MinTreeWasserClusterPlot(data_frame, __wasser_vertex_union(tree))
+    return __wasser_vertex_union(tree, filters)
 
 
-def __wasser_vertex_union(tree):
-    union_find = UnionFind(tree.number_vertices)
-    tree.calc_wasser_dist()
-    tree.sort()
-
-    for edge in tree.edges:
-        if union_find.num_components <= 6:
-            break
-
-        if not union_find.connected(edge.src, edge.dest):
-            union_find.unify(edge.src, edge.dest)
-
-    return union_find
-
-
-def __minimum_tree(distance, tree):
+def __minimum_tree(distance, tree, filters):
     if distance is Distance.WASSER:
-        return __minimum_wasser_tree(tree, UnionFind(tree.number_vertices))
+        return __wasser_vertex_union(tree, filters).minimum_edges
     else:
-        return __minimum_eucledian_tree(tree, UnionFind(tree.number_vertices))
+        return __minimum_eucledian_tree(tree, UnionFind(tree.number_vertices), filters)
 
 
-def __minimum_eucledian_tree(tree, union_find):
+def __minimum_eucledian_tree(tree, union_find, filters):
     tree.sort()
 
     minimum_edges = []
 
     for edge in tree.edges:
-        if union_find.num_components <= 6:
+        if union_find.num_components <= filters.num_clusters:
             break
 
         if not union_find.connected(edge.src, edge.dest):
@@ -54,18 +37,34 @@ def __minimum_eucledian_tree(tree, union_find):
     return minimum_edges
 
 
-def __minimum_wasser_tree(tree, union_find):
+def __wasser_vertex_union(tree, filters):
+    union_find = UnionFind(tree.number_vertices)
+    tree.flatten_neighbours()
     tree.calc_wasser_dist()
-    tree.wasser_sort()
-
+    tree.sort()
     minimum_edges = []
 
+    avg_wass_d = tree.average_wasser_dist
+    err_margin = avg_wass_d * filters.wasser_error
+    error_range = [avg_wass_d - err_margin, avg_wass_d + err_margin]
+
     for edge in tree.edges:
-        if tree.average_wasser_dist < edge.wasser_cost:
+        if union_find.num_components <= filters.num_clusters:
             break
 
-        if not union_find.connected(edge.src, edge.dest):
-            minimum_edges.append(edge)
-            union_find.unify(edge.src, edge.dest)
+        if edge.wasser_cost == -1:
+            continue
 
-    return minimum_edges
+        if not union_find.connected(edge.src, edge.dest) and __wasser_cost_in_range(edge.wasser_cost, error_range):
+            union_find.unify(edge.src, edge.dest)
+            minimum_edges.append(edge)
+
+    for edge in tree.edges:
+        union_find.find_root_elem(edge.src)
+        union_find.find_root_elem(edge.dest)
+
+    return MinTreeWasserClusterPlot(minimum_edges, union_find.id, union_find.num_components)
+
+
+def __wasser_cost_in_range(wasser_cost, error_range):
+    return wasser_cost <= error_range[1]

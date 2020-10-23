@@ -40,4 +40,4 @@ class UnionFind:
             self.sz[root1] += self.sz[root2]
             self.id[root2] = root1
 
-        self.num_components -= 1
+        self.num_components = self.num_components - 1

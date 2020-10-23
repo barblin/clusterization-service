@@ -1,10 +1,13 @@
 import json
 
 from flask import Flask
+from flask import request
 
-from sample.api.scatter_plot_response import ScatterPlotResponse
 from sample.api.delaunay_plot_response import DelaunayPlotResponse
+from sample.api.min_tree_wasser_scatter_plot import MinTreeWasserScatterPlot
 from sample.api.minimum_tree_response import MinimumTreeResponse
+from sample.api.scatter_plot_response import ScatterPlotResponse
+from sample.models.cluster_filters import ClusterFilters
 from sample.models.cluster_tree import Distance
 from sample.models.config import SUPPORTED_VIEWS
 from sample.plotting import plot
@@ -12,7 +15,6 @@ from sample.services import cluster
 from sample.services import datasource
 from sample.services.delaunay_triangulation import triangulation_plot
 from sample.services.minimum_spanning_tree import create_min_tree, cluster_min_tree
-from sample.api.min_tree_wasser_scatter_plot import MinTreeWasserScatterPlot
 
 app = Flask(__name__)
 
@@ -49,17 +51,20 @@ def delaunay_triangulation_data_for_file(filename):
 
 @app.route('/api/v1/views/minimum-spanning-tree/files/<filename>')
 def minimum_spanning_tree_for_file(filename):
-    return MinimumTreeResponse(create_min_tree(filename, Distance.DIRECT)).jsonify()
+    filters = extract_query_params()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.DIRECT, filters)).jsonify()
 
 
 @app.route('/api/v1/views/minimum-spanning-tree-wasser/files/<filename>')
 def minimum_spanning_tree_wasser_for_file(filename):
-    return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER)).jsonify()
+    filters = extract_query_params()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER, filters)).jsonify()
 
 
 @app.route('/api/v1/views/clusters-min-tree-wasser/files/<filename>')
 def clusters_min_tree_wasser_for_file(filename):
-    return MinTreeWasserScatterPlot(cluster_min_tree(filename)).jsonify()
+    filters = extract_query_params()
+    return MinTreeWasserScatterPlot(cluster_min_tree(filename, filters)).jsonify()
 
 
 @app.route('/api/v1/plots/files/<filename>')
@@ -79,6 +84,12 @@ def after_request(response):
     header = response.headers
     header['Access-Control-Allow-Origin'] = '*'
     return response
+
+
+def extract_query_params():
+    return ClusterFilters(request.args.get('numClusters'),
+                          request.args.get('wasserError'),
+                          request.args.get('distError'))
 
 
 app.run(debug=True)
