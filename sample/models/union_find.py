@@ -4,24 +4,21 @@ class UnionFind:
         self.size = size
         self.num_components = size
 
-        self.sz = [0] * size
-        self.id = [0] * size
-
+        self.id_sz = {}
         for i in range(0, size):
-            self.id[i] = i
-            self.sz[i] = 1
+            self.id_sz[i] = [i, 1]
 
     def connected(self, p, q):
         return self.find_root_elem(p) == self.find_root_elem(q)
 
     def find_root_elem(self, p):
         root = p
-        while root != self.id[root]:
-            root = self.id[root]
+        while root != self.id_sz[root][0]:
+            root = self.id_sz[root][0]
 
         while p != root:
-            next_el = self.id[p]
-            self.id[p] = root
+            next_el = self.id_sz[p][0]
+            self.id_sz[p][0] = root
             p = next_el
 
         return root
@@ -33,11 +30,11 @@ class UnionFind:
         if root1 == root2:
             return
 
-        if self.sz[root1] < self.sz[root2]:
-            self.sz[root2] += self.sz[root1]
-            self.id[root1] = root2
+        if self.id_sz[root1][1] < self.id_sz[root2][1]:
+            self.id_sz[root2][1] += self.id_sz[root1][1]
+            self.id_sz[root1][0] = root2
         else:
-            self.sz[root1] += self.sz[root2]
-            self.id[root2] = root1
+            self.id_sz[root1][1] += self.id_sz[root2][1]
+            self.id_sz[root2][0] = root1
 
         self.num_components = self.num_components - 1

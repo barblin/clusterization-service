@@ -1,6 +1,6 @@
 
 class ClusterFilters:
-    def __init__(self, num_clusters, wasser_error, dist_error):
+    def __init__(self, num_clusters, wasser_error, remove_outliers):
         if num_clusters is None:
             self.num_clusters = 6
         else:
@@ -11,7 +11,7 @@ class ClusterFilters:
         else:
             self.wasser_error = float(wasser_error)
 
-        if dist_error is None:
-            self.dist_error = 0
+        if remove_outliers is None:
+            self.remove_outliers = False
         else:
-            self.dist_error = float(dist_error)
+            self.remove_outliers = bool(remove_outliers)

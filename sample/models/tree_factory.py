@@ -27,8 +27,6 @@ def __create_tree(filename):
     tri = triangulate_delaunay(filename, point_array)
     tree = DistanceTree(len(point_array))
 
-    distinct_points = []
-
     for entries in tri.simplices:
         row = []
         for entry in entries:
@@ -37,10 +35,6 @@ def __create_tree(filename):
         dist1 = two_d_distance(row[0][0], row[0][1], row[1][0], row[1][1])
         dist2 = two_d_distance(row[0][0], row[0][1], row[2][0], row[2][1])
         dist3 = two_d_distance(row[1][0], row[1][1], row[2][0], row[2][1])
-
-        distinct_points.append(entries[0])
-        distinct_points.append(entries[1])
-        distinct_points.append(entries[2])
 
         edge1 = Edge(entries[0], entries[1], dist1, Vertex(row[0]), Vertex(row[1]))
         edge2 = Edge(entries[0], entries[2], dist2, Vertex(row[0]), Vertex(row[2]))

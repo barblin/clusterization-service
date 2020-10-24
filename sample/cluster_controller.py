@@ -89,7 +89,7 @@ def after_request(response):
 def extract_query_params():
     return ClusterFilters(request.args.get('numClusters'),
                           request.args.get('wasserError'),
-                          request.args.get('distError'))
+                          request.args.get('remOutliers'))
 
 
 app.run(debug=True)

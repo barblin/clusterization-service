@@ -31,7 +31,8 @@ class DistanceTree:
         self.edges = []
         self.neighbours = {}
         self.number_vertices = vertices
-        self.average_wasser_dist = 0
+        self.min_wasser = 200000
+        self.max_wasser = 0
 
     def add_edge(self, edge):
         self.edges.append(edge)
@@ -65,9 +66,11 @@ class DistanceTree:
             self.neighbours[key] = value
 
     def calc_wasser_dist(self):
-        sum_wasser_dist = 0
         for edge in self.edges:
             edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
-            sum_wasser_dist += edge.wasser_cost
 
-        self.average_wasser_dist = sum_wasser_dist / len(self.edges)
+            if edge.wasser_cost < self.min_wasser:
+                self.min_wasser = edge.wasser_cost
+
+            if self.max_wasser < edge.wasser_cost:
+                self.max_wasser = edge.wasser_cost

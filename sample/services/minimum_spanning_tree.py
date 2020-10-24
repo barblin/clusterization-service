@@ -39,15 +39,17 @@ def __minimum_eucledian_tree(tree, union_find, filters):
 
 def __wasser_vertex_union(tree, filters):
     union_find = UnionFind(tree.number_vertices)
-    tree.flatten_neighbours()
+
+    if filters.remove_outliers:
+        tree.flatten_neighbours()
+
     tree.calc_wasser_dist()
     tree.sort()
+
+    err_margin = (tree.max_wasser - tree.min_wasser) * filters.wasser_error
+    error_range = tree.min_wasser + err_margin
+
     minimum_edges = []
-
-    avg_wass_d = tree.average_wasser_dist
-    err_margin = avg_wass_d * filters.wasser_error
-    error_range = [avg_wass_d - err_margin, avg_wass_d + err_margin]
-
     for edge in tree.edges:
         if union_find.num_components <= filters.num_clusters:
             break
@@ -63,8 +65,8 @@ def __wasser_vertex_union(tree, filters):
         union_find.find_root_elem(edge.src)
         union_find.find_root_elem(edge.dest)
 
-    return MinTreeWasserClusterPlot(minimum_edges, union_find.id, union_find.num_components)
+    return MinTreeWasserClusterPlot(tree.edges, minimum_edges, union_find, filters.num_clusters)
 
 
 def __wasser_cost_in_range(wasser_cost, error_range):
-    return wasser_cost <= error_range[1]
+    return wasser_cost <= error_range

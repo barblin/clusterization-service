@@ -11,7 +11,8 @@ class TriPlot:
 
 
 class MinTreeWasserClusterPlot:
-    def __init__(self, minimum_edges, ids, components):
+    def __init__(self, edges, minimum_edges, union_find, num_clusters):
+        self.edges = edges
         self.minimum_edges = minimum_edges
-        self.ids = ids
-        self.components = components
+        self.union_find = union_find
+        self.num_clusters = num_clusters
