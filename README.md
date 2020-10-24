@@ -52,13 +52,17 @@ Then you can install the packages you need in your environment
 /api/v1/views/delaunay-triangulation/files/<filename>
 
 /api/v1/views/minimum-spanning-tree/files/<filename>
+
+/api/v1/views/minimum-spanning-tree-wasser/files/<filename>
 ```
 
-### Plotting endpoints to plot server side matplot lib plots
-```
-/api/v1/plots/files/<filename>
 
-/api/v1/plots/clusters/files/<filename>
+### File viewer endpoints to execute a specific algorithm for clustering of file data
 ```
+/api/v1/views/clusters/files/<filename>
+
+/api/v1/views/clusters-min-tree-wasser/files/<filename>
+```
+
 
 Example: http://localhost:5000/api/v1/version
