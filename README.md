@@ -15,7 +15,7 @@ Open Power shell in your root directory
 
 Set up your controller or app file for flask 
 ```
-$env:FLASK_APP = "./sample/cluster_controller.py"
+$env:FLASK_APP = "./sample/app.py"
 ```
 
 At last
@@ -64,5 +64,12 @@ Then you can install the packages you need in your environment
 /api/v1/views/clusters-min-tree-wasser/files/<filename>
 ```
 
+
+### File viewer endpoints to plot via matplot lib
+```
+/api/v1/plots/files/<filename>
+
+/api/v1/plots/clusters/files/<filename>
+```
 
 Example: http://localhost:5000/api/v1/version
