@@ -16,7 +16,6 @@ def triangulation_plot(filename):
 
 def triangulation_data(filename, point_array):
     if filename in tri_cache.keys():
-        print("trie hit")
         return tri_cache[filename]
 
     tri = triangulate_delaunay(filename, point_array)

@@ -41,7 +41,8 @@ def __wasser_vertex_union(tree, filters):
     union_find = UnionFind(tree.number_vertices)
 
     if filters.remove_outliers:
-        tree.flatten_neighbours()
+        print(filters.stdv_multiplier)
+        tree.flatten_neighbours(filters.stdv_multiplier)
 
     tree.calc_wasser_dist()
     tree.sort()
@@ -69,4 +70,4 @@ def __wasser_vertex_union(tree, filters):
 
 
 def __wasser_cost_in_range(wasser_cost, error_range):
-    return wasser_cost <= error_range
+    return 0 <= wasser_cost <= error_range

@@ -1,11 +1,7 @@
-from numpy import unique
-
 from sample.models.cluster_tree import DistanceTree, Edge, Vertex
 from sample.services.datasource import load_file, data_without_labels
 from sample.services.delaunay_triangulation import triangulate_delaunay
 from sample.services.linear_algebra import two_d_distance
-
-tree_cache = {}
 
 
 def create_tree(filename):
@@ -13,12 +9,7 @@ def create_tree(filename):
 
 
 def __fetch_tree(filename):
-    if filename in tree_cache.keys():
-        return tree_cache[filename]
-
-    tree_cache[filename] = __create_tree(filename)
-
-    return tree_cache[filename]
+    return __create_tree(filename)
 
 
 def __create_tree(filename):

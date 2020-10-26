@@ -1,7 +1,7 @@
 from enum import Enum
 
-from scipy.stats import wasserstein_distance
 import numpy as np
+from scipy.stats import wasserstein_distance
 
 
 class Distance(Enum):
@@ -53,24 +53,26 @@ class DistanceTree:
     def sort_wasser(self):
         self.edges.sort(key=lambda x: x.wasser_cost)
 
-    def flatten_neighbours(self):
+    def flatten_neighbours(self, stdv_multiplier):
         for key in self.neighbours.keys():
             value = self.neighbours[key]
             arr = np.array(value)
             mean = np.mean(arr, axis=0)
             sd = np.std(arr, axis=0)
 
-            value = [x for x in arr if (x > mean - 2 * sd)]
-            value = [x for x in value if (x < mean + 2 * sd)]
+            value = [x for x in value if (x < mean + stdv_multiplier * sd)]
 
             self.neighbours[key] = value
 
     def calc_wasser_dist(self):
         for edge in self.edges:
-            edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
+            if not self.neighbours[edge.src] or not self.neighbours[edge.dest]:
+                edge.wasser_cost = -1
+            else:
+                edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
 
-            if edge.wasser_cost < self.min_wasser:
-                self.min_wasser = edge.wasser_cost
+                if edge.wasser_cost < self.min_wasser:
+                    self.min_wasser = edge.wasser_cost
 
-            if self.max_wasser < edge.wasser_cost:
-                self.max_wasser = edge.wasser_cost
+                if self.max_wasser < edge.wasser_cost:
+                    self.max_wasser = edge.wasser_cost

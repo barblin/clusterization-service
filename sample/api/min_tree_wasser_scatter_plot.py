@@ -1,12 +1,29 @@
 import json
+
 import numpy as np
 
 
 class MinTreeWasserScatterPlot:
     def __init__(self, wasser_scatter_plot):
         self.data = []
+        self.processed_points = {}
 
         labels = wasser_scatter_plot.union_find.id_sz;
+        color_dict = self.__create_color_map(labels, wasser_scatter_plot)
+
+        self.max_X = 0
+        self.max_Y = 0
+
+        for edge in wasser_scatter_plot.edges:
+            self.__create_point(edge.point1, edge.src, labels, color_dict)
+            self.__create_point(edge.point2, edge.dest, labels, color_dict)
+
+        self.processed_points = None
+
+    def jsonify(self):
+        return json.dumps(self.__dict__)
+
+    def __create_color_map(self, labels, wasser_scatter_plot):
         values = []
         for key in labels:
             values.append(wasser_scatter_plot.union_find.id_sz[key])
@@ -22,41 +39,25 @@ class MinTreeWasserScatterPlot:
             color_dict[id_sz[i][0]] = color_idx
             color_idx += 1
 
-        self.max_X = 0
-        self.max_Y = 0
+        return color_dict
 
-        for edge in wasser_scatter_plot.edges:
-            src_x = edge.point1.coords[0]
-            src_y = edge.point1.coords[1]
+    def __create_point(self, point, key, labels, color_dict):
+        if key in self.processed_points.keys():
+            return
 
-            if labels[edge.src][0] in color_dict.keys():
-                label_src = color_dict[labels[edge.src][0]]
-            else:
-                label_src = -1
+        point_x = point.coords[0]
+        point_y = point.coords[1]
 
-            if self.max_X < src_x:
-                self.max_X = src_x
+        if labels[key][0] in color_dict.keys():
+            label = color_dict[labels[key][0]]
+        else:
+            label = -1
 
-            if self.max_Y < src_y:
-                self.max_Y = src_y
+        if self.max_X < point_x:
+            self.max_X = point_x
 
-            self.data.append((src_x, src_y, int(label_src)))
+        if self.max_Y < point_y:
+            self.max_Y = point_y
 
-            des_x = edge.point2.coords[0]
-            des_y = edge.point2.coords[1]
-
-            if labels[edge.dest][0] in color_dict.keys():
-                label_des = color_dict[labels[edge.dest][0]]
-            else:
-                label_des = -1
-
-            if self.max_X < des_x:
-                self.max_X = des_x
-
-            if self.max_Y < des_y:
-                self.max_Y = des_y
-
-            self.data.append((des_x, des_y, int(label_des)))
-
-    def jsonify(self):
-        return json.dumps(self.__dict__)
+        self.data.append((point_x, point_y, int(label)))
+        self.processed_points[key] = None
