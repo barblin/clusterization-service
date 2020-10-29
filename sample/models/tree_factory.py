@@ -13,10 +13,10 @@ def __fetch_tree(filename):
 
 
 def __create_tree(filename):
-    point_array = data_without_labels(load_file(filename))
-
-    tri = triangulate_delaunay(filename, point_array)
-    tree = DistanceTree(len(point_array))
+    df = load_file(filename)
+    point_array = df.to_numpy()
+    tri = triangulate_delaunay(filename, data_without_labels(df))
+    tree = DistanceTree(point_array)
 
     for entries in tri.simplices:
         row = []

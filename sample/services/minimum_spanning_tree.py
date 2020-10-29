@@ -18,7 +18,7 @@ def __minimum_tree(distance, tree, filters):
     if distance is Distance.WASSER:
         return __wasser_vertex_union(tree, filters).minimum_edges
     else:
-        return __minimum_eucledian_tree(tree, UnionFind(tree.number_vertices), filters)
+        return __minimum_eucledian_tree(tree, UnionFind(tree.point_array), filters)
 
 
 def __minimum_eucledian_tree(tree, union_find, filters):
@@ -38,10 +38,9 @@ def __minimum_eucledian_tree(tree, union_find, filters):
 
 
 def __wasser_vertex_union(tree, filters):
-    union_find = UnionFind(tree.number_vertices)
+    union_find = UnionFind(tree.point_array)
 
     if filters.remove_outliers:
-        print(filters.stdv_multiplier)
         tree.flatten_neighbours(filters.stdv_multiplier)
 
     tree.calc_wasser_dist()

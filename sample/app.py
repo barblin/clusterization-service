@@ -4,7 +4,7 @@ from sample.controllers.cluster_controller import cluster_controller
 from sample.controllers.config_controller import config_controller
 from sample.controllers.plot_controller import plot_controller
 from sample.controllers.view_controller import view_controller
-from sample.controllers.triple_controller import triple_controller
+from sample.controllers.multi_controller import multi_controller
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ app.register_blueprint(config_controller)
 app.register_blueprint(plot_controller)
 app.register_blueprint(view_controller)
 app.register_blueprint(cluster_controller)
-app.register_blueprint(triple_controller)
+app.register_blueprint(multi_controller)
 
 
 @app.route("/")

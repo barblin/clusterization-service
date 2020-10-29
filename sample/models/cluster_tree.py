@@ -1,3 +1,4 @@
+import sys
 from enum import Enum
 
 import numpy as np
@@ -12,7 +13,6 @@ class Distance(Enum):
 class Vertex:
     def __init__(self, coords):
         self.coords = coords
-        self.label = -1
 
 
 class Edge:
@@ -27,11 +27,12 @@ class Edge:
 
 
 class DistanceTree:
-    def __init__(self, vertices):
+    def __init__(self, vertex_data):
+        self.point_array = vertex_data
         self.edges = []
         self.neighbours = {}
-        self.number_vertices = vertices
-        self.min_wasser = 200000
+        self.number_vertices = len(vertex_data)
+        self.min_wasser = sys.maxsize
         self.max_wasser = 0
 
     def add_edge(self, edge):
