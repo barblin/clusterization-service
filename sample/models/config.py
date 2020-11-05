@@ -7,7 +7,6 @@ MIN_TREE_WASSER_CLUSTER = "clusters-min-tree-wasser"
 TRIPLE_PLOTS = "multi-plots"
 
 SUPPORTED_VIEWS = [SIMPLE_PLOT,
-                   CLUSTER,
                    DELAUNAY_TRIANGULATION,
                    MINIMUM_SPANNING_TREE,
                    MINIMUM_SPANNING_TREE_WASSER,
