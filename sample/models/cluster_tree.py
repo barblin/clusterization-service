@@ -58,8 +58,8 @@ class DistanceTree:
         for key in self.neighbours.keys():
             value = self.neighbours[key]
             arr = np.array(value)
-            mean = np.mean(arr, axis=0)
-            sd = np.std(arr, axis=0)
+            mean = np.mean(arr)
+            sd = np.std(arr)
 
             value = [x for x in value if (x < mean + stdv_multiplier * sd)]
 
