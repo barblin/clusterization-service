@@ -3,6 +3,7 @@ from enum import Enum
 
 import numpy as np
 from scipy.stats import wasserstein_distance
+from sklearn.preprocessing import normalize
 
 
 class Distance(Enum):
@@ -64,6 +65,15 @@ class DistanceTree:
             value = [x for x in value if (x < mean + stdv_multiplier * sd)]
 
             self.neighbours[key] = value
+
+    def normalize_neighbours(self):
+        print("normalizing")
+        for key in self.neighbours.keys():
+            value = self.neighbours[key]
+            arr = np.array(value)
+            norm = normalize(arr[:, np.newaxis], axis=0).ravel()
+            #print(norm)
+            self.neighbours[key] = norm.tolist()
 
     def calc_wasser_dist(self):
         for edge in self.edges:

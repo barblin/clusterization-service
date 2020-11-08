@@ -1,5 +1,5 @@
 class ClusterFilters:
-    def __init__(self, num_clusters, wasser_error, remove_outliers, stdv_multiplier):
+    def __init__(self, num_clusters, wasser_error, remove_outliers, stdv_multiplier, normalize_neigh_dist):
         if num_clusters is None:
             self.num_clusters = 6
         else:
@@ -10,12 +10,17 @@ class ClusterFilters:
         else:
             self.wasser_error = float(wasser_error)
 
-        if remove_outliers is None:
-            self.remove_outliers = False
+        if remove_outliers == "true":
+            self.remove_outliers = True
         else:
-            self.remove_outliers = bool(remove_outliers)
+            self.remove_outliers = False
 
         if stdv_multiplier is None:
             self.stdv_multiplier = 2
         else:
             self.stdv_multiplier = float(stdv_multiplier)
+
+        if normalize_neigh_dist == "true":
+            self.normalize_neigh_dist = True
+        else:
+            self.normalize_neigh_dist = False

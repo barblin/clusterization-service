@@ -40,8 +40,11 @@ def __minimum_eucledian_tree(tree, union_find, filters):
 def __wasser_vertex_union(tree, filters):
     union_find = UnionFind(tree.point_array)
 
-    if filters.remove_outliers:
+    if filters.remove_outliers is True:
         tree.flatten_neighbours(filters.stdv_multiplier)
+
+    if filters.normalize_neigh_dist is True:
+        tree.normalize_neighbours()
 
     tree.calc_wasser_dist()
     tree.sort()
