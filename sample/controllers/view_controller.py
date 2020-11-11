@@ -7,7 +7,7 @@ from sample.api.scatter_plot_response import ScatterPlotResponse
 from sample.models.cluster_tree import Distance
 from sample.services import datasource
 from sample.services.delaunay_triangulation import triangulation_plot
-from sample.services.minimum_spanning_tree import create_min_tree
+from sample.services.tree.minimum_spanning_tree import create_min_tree
 
 view_controller = Blueprint('view_controller', __name__)
 

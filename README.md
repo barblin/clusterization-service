@@ -1,4 +1,5 @@
 # clusterization-service
+![editor screen](./ressources/imgs/editor_screen.PNG)
 
 Get started with jupyter by going to https://jupyter.org/install.
 
@@ -62,6 +63,12 @@ Then you can install the packages you need in your environment
 /api/v1/views/clusters/files/<filename>
 
 /api/v1/views/clusters-min-tree-wasser/files/<filename>
+```
+
+
+### File viewer endpoints to plot variances
+```
+/api/v1/views/variances-plots/files/<filename>
 ```
 
 

@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from sample.api.multi_view import MultiView
 from sample.api.request import extract_query_params
-from sample.services.minimum_spanning_tree import cluster_min_tree
+from sample.services.tree.minimum_spanning_tree import cluster_min_tree
 
 multi_controller = Blueprint('multi_controller', __name__)
 
