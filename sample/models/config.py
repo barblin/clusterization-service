@@ -5,11 +5,13 @@ MINIMUM_SPANNING_TREE = "minimum-spanning-tree"
 MINIMUM_SPANNING_TREE_WASSER = "minimum-spanning-tree-wasser"
 MIN_TREE_WASSER_CLUSTER = "clusters-min-tree-wasser"
 TRIPLE_PLOTS = "multi-plots"
+VARIANCES_PLOTS = "variances-plots"
 
 SUPPORTED_VIEWS = [[SIMPLE_PLOT, "Plot data as scatter"],
                    [DELAUNAY_TRIANGULATION, "Delaunay Triangulation"],
                    [MINIMUM_SPANNING_TREE, "Minimum spanning tree"],
                    [MINIMUM_SPANNING_TREE_WASSER, "Min tree by W distance"],
                    [MIN_TREE_WASSER_CLUSTER, "Vertices of min tree by W distance (labeled)"],
-                   [TRIPLE_PLOTS, "Cross compare clusters"]]
+                   [TRIPLE_PLOTS, "Cross compare clusters"],
+                   [VARIANCES_PLOTS, "Plots for variances range"]]
 SUPPORTED_ALGOS = []

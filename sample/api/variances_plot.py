@@ -6,4 +6,4 @@ class VariancesPlot:
         self.data = data
 
     def jsonify(self):
-        return json.dumps(self.data)
+        return json.dumps([ob.__dict__ for ob in self.data])

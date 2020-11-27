@@ -1,7 +1,5 @@
 import json
 
-from sample.services.color_mapping import create_color_map_by_size_decreasing
-
 
 class MinTreeWasserScatterPlot:
     def __init__(self, wasser_scatter_plot):
@@ -9,7 +7,7 @@ class MinTreeWasserScatterPlot:
         self.processed_points = {}
 
         labels = wasser_scatter_plot.union_find.id_sz
-        color_dict = create_color_map_by_size_decreasing(labels.copy(), wasser_scatter_plot.num_clusters)
+        color_dict = wasser_scatter_plot.color_dict
 
         self.max_X = 0
         self.max_Y = 0

@@ -1,35 +1,38 @@
-from sample.models.plots import MinTreeWasserClusterPlot
 from sample.models.union_find import UnionFind
 
 
-def unify_by_wasser_distance(tree, wasser_error, num_clusters):
+def unify_by_wasser_distance(tree, wasser_error):
     tree.sort()
-    return __wasser_vertex_union(tree, wasser_error, num_clusters)
+    return wasser_vertex_union(tree, wasser_error)
 
 
-def __wasser_vertex_union(tree, wasser_error, num_clusters):
-    union_find = UnionFind(tree.point_array)
-
+def wasser_vertex_union(tree, wasser_error):
     err_margin = (tree.max_wasser - tree.min_wasser) * wasser_error
     error_range = tree.min_wasser + err_margin
 
-    minimum_edges = []
+    filtered_edges = []
     for edge in tree.edges:
-        if union_find.num_components <= num_clusters:
-            break
+        if __wasser_cost_in_range(edge.wasser_cost, error_range):
+            filtered_edges.append(edge)
 
+    return filtered_edges
+
+
+def unify(point_array, filtered_edges):
+    union_find = UnionFind(point_array)
+
+    for edge in filtered_edges:
         if edge.wasser_cost == -1:
             continue
-
-        if not union_find.connected(edge.src, edge.dest) and __wasser_cost_in_range(edge.wasser_cost, error_range):
+        if not union_find.connected(edge.src, edge.dest):
             union_find.unify(edge.src, edge.dest, edge.wasser_cost)
-            minimum_edges.append(edge)
 
-    for edge in tree.edges:
-        union_find.find_root_elem(edge.src)
-        union_find.find_root_elem(edge.dest)
+    return union_find
 
-    return MinTreeWasserClusterPlot(tree.edges, minimum_edges, union_find, num_clusters)
+
+def reduce_to_significant(uf):
+    cluster_dict = create_cluster_by_size_decreasing(uf)
+    return cluster_dict
 
 
 def __wasser_cost_in_range(wasser_cost, error_range):

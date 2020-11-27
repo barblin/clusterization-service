@@ -4,10 +4,10 @@ from sample.models.union_find import UnionFind
 
 def unify_by_wasser_distnace(tree, filters):
     tree.sort_wasser()
-    return __2d_distance_vertex_union(tree, filters.wasser_error, filters.num_clusters)
+    return __2d_distance_vertex_union(tree, filters.wasser_error)
 
 
-def __2d_distance_vertex_union(tree, wasser_error, num_clusters):
+def __2d_distance_vertex_union(tree, wasser_error):
     union_find = UnionFind(tree.point_array)
 
     err_margin = (tree.max_wasser - tree.min_wasser) * wasser_error
@@ -15,9 +15,6 @@ def __2d_distance_vertex_union(tree, wasser_error, num_clusters):
 
     minimum_edges = []
     for edge in tree.edges:
-        if union_find.num_components <= num_clusters:
-            break
-
         if edge.wasser_cost == -1:
             continue
 
@@ -29,7 +26,7 @@ def __2d_distance_vertex_union(tree, wasser_error, num_clusters):
         union_find.find_root_elem(edge.src)
         union_find.find_root_elem(edge.dest)
 
-    return MinTreeWasserClusterPlot(tree.edges, minimum_edges, union_find, num_clusters)
+    return MinTreeWasserClusterPlot(tree.edges, minimum_edges, union_find)
 
 
 def __wasser_cost_in_range(wasser_cost, error_range):

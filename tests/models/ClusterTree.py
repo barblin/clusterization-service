@@ -1,6 +1,6 @@
 import unittest
-from sample.models.cluster_tree import DistanceTree
-from sample.models.cluster_tree import Edge
+from sample.models.tree import DistanceTree
+from sample.models.tree import Edge
 
 
 class MyTestCase(unittest.TestCase):

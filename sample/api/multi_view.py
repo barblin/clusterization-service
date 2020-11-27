@@ -1,6 +1,6 @@
 import json
 
-from sample.services.color_mapping import create_color_map_by_size_decreasing
+from sample.services.color.color_mapping import create_color_map_by_size_decreasing
 
 
 class MultiView:
@@ -18,7 +18,7 @@ class MultiView:
         self.processed_points = {}
 
         labels = wasser_scatter_plot.union_find.id_sz
-        color_dict = create_color_map_by_size_decreasing(labels.copy(), wasser_scatter_plot.num_clusters)
+        color_dict = create_color_map_by_size_decreasing(labels.copy())
 
         for edge in wasser_scatter_plot.edges:
             self.__create_point(edge.point1, edge.src, labels, color_dict)

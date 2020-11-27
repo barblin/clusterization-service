@@ -1,6 +1,6 @@
 from flask import request
 
-from sample.models.cluster_filters import ClusterFilters
+from sample.models.filters.cluster_filters import ClusterFilters
 
 
 def extract_query_params():
@@ -8,4 +8,7 @@ def extract_query_params():
                           request.args.get('wasserError'),
                           request.args.get('remOutliers'),
                           request.args.get('stdvMultiplier'),
-                          request.args.get('normalizeNeighDist'))
+                          request.args.get('normalizeNeighDist'),
+                          request.args.get('varsFrom'),
+                          request.args.get('varsUntil'),
+                          request.args.get('varsStepSize'))

@@ -27,6 +27,15 @@ class Edge:
         self.average_neighbour_cost = 0
 
 
+def calc_cutoff(neighs, stdv_multiplier):
+    value = neighs
+    arr = np.array(value)
+    mean = np.mean(arr)
+    sd = np.std(arr)
+
+    return mean + stdv_multiplier * sd
+
+
 class DistanceTree:
     def __init__(self, vertex_data):
         self.point_array = vertex_data
@@ -55,24 +64,34 @@ class DistanceTree:
     def sort_wasser(self):
         self.edges.sort(key=lambda x: x.wasser_cost)
 
+    def remove_outliers(self, stdv_multiplier):
+        filtered_edges = []
+
+        for edge in self.edges:
+            src_neighs = self.neighbours[edge.src]
+            dest_neighs = self.neighbours[edge.src]
+
+            cutoff_src = calc_cutoff(src_neighs, stdv_multiplier)
+            cutoff_dest = calc_cutoff(dest_neighs, stdv_multiplier)
+
+            if edge.cost <= cutoff_src and edge.cost <= cutoff_dest:
+                filtered_edges.append(edge)
+
+        self.edges = filtered_edges
+
     def flatten_neighbours(self, stdv_multiplier):
         for key in self.neighbours.keys():
             value = self.neighbours[key]
-            arr = np.array(value)
-            mean = np.mean(arr)
-            sd = np.std(arr)
-
-            value = [x for x in value if (x < mean + stdv_multiplier * sd)]
+            cutoff = calc_cutoff(value, stdv_multiplier)
+            value = [x for x in value if (x <= cutoff)]
 
             self.neighbours[key] = value
 
     def normalize_neighbours(self):
-        print("normalizing")
         for key in self.neighbours.keys():
             value = self.neighbours[key]
             arr = np.array(value)
             norm = normalize(arr[:, np.newaxis], axis=0).ravel()
-            #print(norm)
             self.neighbours[key] = norm.tolist()
 
     def calc_wasser_dist(self):
