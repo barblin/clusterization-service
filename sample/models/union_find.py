@@ -52,14 +52,18 @@ class UnionFind:
             self.id_sz[root2].sz += self.id_sz[root1].sz
             self.id_sz[root2].costs.append(float(w_cost))
             self.id_sz[root2].costs.extend(self.id_sz[root1].costs)
+            self.id_sz[root1].costs = []
             self.id_sz[root2].vertices.extend(self.id_sz[root1].vertices)
+            self.id_sz[root1].vertices = []
 
             self.id_sz[root1].id = root2
         else:
             self.id_sz[root1].sz += self.id_sz[root2].sz
             self.id_sz[root1].costs.append(float(w_cost))
             self.id_sz[root1].costs.extend(self.id_sz[root2].costs)
+            self.id_sz[root2].costs = []
             self.id_sz[root1].vertices.extend(self.id_sz[root2].vertices)
+            self.id_sz[root2].vertices = []
 
             self.id_sz[root2].id = root1
 

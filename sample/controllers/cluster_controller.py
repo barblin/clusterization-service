@@ -1,3 +1,5 @@
+import time
+
 from flask import Blueprint
 
 from sample.api.request import extract_query_params
@@ -15,5 +17,8 @@ def cluster_data_for_file(filename):
 
 @cluster_controller.route('/api/v1/views/clusters-min-tree-wasser/files/<filename>')
 def clusters_min_tree_wasser_for_file(filename):
+    start_time = time.time()
     filters = extract_query_params()
-    return cluster_for_wasser_dist(filename, filters).jsonify()
+    dings = cluster_for_wasser_dist(filename, filters).jsonify()
+    print("--- %s seconds ---" % (time.time() - start_time))
+    return dings

@@ -31,4 +31,5 @@ def minimum_spanning_tree_for_file(filename):
 @view_controller.route('/api/v1/views/minimum-spanning-tree-wasser/files/<filename>')
 def minimum_spanning_tree_wasser_for_file(filename):
     filters = extract_query_params()
+    filters.wasser_error = 10000
     return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER, filters)).jsonify()

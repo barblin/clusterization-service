@@ -1,9 +1,23 @@
 from sample.models.union_find import UnionFind
+from sample.services.color.color_mapping import create_cluster_by_size_decreasing
 
 
-def unify_by_wasser_distance(tree, wasser_error):
-    tree.sort()
-    return wasser_vertex_union(tree, wasser_error)
+def unify_by_wasser_distance(tree):
+    tree.clean_wasser_calc()
+    tree.sort_wasser()
+    return unify_wasser(tree)
+
+
+def unify_wasser(tree):
+    union_find = UnionFind(tree.point_array)
+
+    filtered_edges = []
+    for edge in tree.edges:
+        if not union_find.connected(edge.src, edge.dest):
+            union_find.unify(edge.src, edge.dest, edge.wasser_cost)
+            filtered_edges.append(edge)
+
+    return filtered_edges
 
 
 def wasser_vertex_union(tree, wasser_error):

@@ -9,14 +9,6 @@ class ClusterData:
         self.max_y = max_y
 
 
-def prepare_tree(tree, stdv_multiplier):
-    tree.sort()
-    tree.remove_outliers(stdv_multiplier)
-    tree.flatten_neighbours(stdv_multiplier)
-    tree.calc_wasser_dist()
-    return tree
-
-
 def cluster(tree, wass_err):
     edges = filter_by_wasser_dist(tree, wass_err)
     cluster_candidates = unify(tree.point_array, edges)

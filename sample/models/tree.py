@@ -3,7 +3,6 @@ from enum import Enum
 
 import numpy as np
 from scipy.stats import wasserstein_distance
-from sklearn.preprocessing import normalize
 
 
 class Distance(Enum):
@@ -64,6 +63,30 @@ class DistanceTree:
     def sort_wasser(self):
         self.edges.sort(key=lambda x: x.wasser_cost)
 
+    def clean_wasser_calc(self):
+        for edge in self.edges:
+            self.__calc_wasser_dist(edge)
+
+    def __calc_wasser_dist(self, edge):
+        if not self.neighbours[edge.src] or not self.neighbours[edge.dest]:
+            edge.wasser_cost = -1
+        else:
+            edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
+
+            if edge.wasser_cost < self.min_wasser:
+                self.min_wasser = edge.wasser_cost
+
+            if self.max_wasser < edge.wasser_cost:
+                self.max_wasser = edge.wasser_cost
+
+    def flatten_neighbours(self, stdv_multiplier):
+        for key in self.neighbours.keys():
+            value = self.neighbours[key]
+            cutoff = calc_cutoff(value, stdv_multiplier)
+            value = [x for x in value if (x <= cutoff)]
+
+            self.neighbours[key] = value
+
     def remove_outliers(self, stdv_multiplier):
         filtered_edges = []
 
@@ -78,31 +101,3 @@ class DistanceTree:
                 filtered_edges.append(edge)
 
         self.edges = filtered_edges
-
-    def flatten_neighbours(self, stdv_multiplier):
-        for key in self.neighbours.keys():
-            value = self.neighbours[key]
-            cutoff = calc_cutoff(value, stdv_multiplier)
-            value = [x for x in value if (x <= cutoff)]
-
-            self.neighbours[key] = value
-
-    def normalize_neighbours(self):
-        for key in self.neighbours.keys():
-            value = self.neighbours[key]
-            arr = np.array(value)
-            norm = normalize(arr[:, np.newaxis], axis=0).ravel()
-            self.neighbours[key] = norm.tolist()
-
-    def calc_wasser_dist(self):
-        for edge in self.edges:
-            if not self.neighbours[edge.src] or not self.neighbours[edge.dest]:
-                edge.wasser_cost = -1
-            else:
-                edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
-
-                if edge.wasser_cost < self.min_wasser:
-                    self.min_wasser = edge.wasser_cost
-
-                if self.max_wasser < edge.wasser_cost:
-                    self.max_wasser = edge.wasser_cost
