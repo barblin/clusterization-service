@@ -4,15 +4,17 @@ import numpy as np
 
 from sample.models.variance import VarianceData
 from sample.services.cluster.cluster_wasser import cluster
+from sample.services.score.score_service import get_file_nmi
 from sample.services.tree.minimum_spanning_tree import get_and_prep_tree
 
 
 def cluster_for_incr_wasser_dist(filename, filters):
     tree = get_and_prep_tree(filename, filters)
+    file_nmis = get_file_nmi(filename)
 
     sig_variances = []
-    index_of_harmonic_variance = 0
-    cur_min_var_mean = 10000
+    harmonic_clus_idx = 0
+    cur_max_nmi = 0
     cur_idx = 0
 
     if filters.remove_outliers:
@@ -22,44 +24,45 @@ def cluster_for_incr_wasser_dist(filename, filters):
     tree.clean_wasser_calc()
 
     for i in np.arange(filters.vars_from, filters.vars_until, filters.vars_step_size):
+        start_time = time.time()
+
         cluster_data = cluster(tree, i)
 
-        vars_in_clusters = __calc_in(cluster_data.clusters)
-        cur_var = np.var(vars_in_clusters) * len(vars_in_clusters)
+        in_clusters = __calc_in(cluster_data.clusters)
+        cur_var = np.var(in_clusters)
 
-        if cur_var < cur_min_var_mean:
-            cur_min_var_mean = cur_var
-            index_of_harmonic_variance = cur_idx
+        if cur_max_nmi < cluster_data.nmi:
+            cur_max_nmi = cluster_data.nmi
+            harmonic_clus_idx = cur_idx
 
-        sig_variances.append(VarianceData("pl" + str(len(sig_variances)), float(i), float(cur_var),
-                                          vars_in_clusters, cluster_data))
+        idx = str(len(sig_variances))
+        sig_variances.append(VarianceData("pl" + idx, float(i), float(cur_var), in_clusters, cluster_data,
+                                          time.time() - start_time, file_nmis))
 
         cur_idx += 1
 
-    sig_variances[index_of_harmonic_variance].significant = True
+    sig_variances[harmonic_clus_idx].significant = True
     return sig_variances
 
 
 def cluster_for_wasser_dist(filename, filters):
     start_time = time.time()
+
     tree = get_and_prep_tree(filename, filters)
-    print("get_and_prep_tree: %s seconds" % (time.time() - start_time))
-    start_time = time.time()
 
     if filters.remove_outliers:
         tree.flatten_neighbours(filters.stdv_multiplier)
         tree.remove_outliers(filters.stdv_multiplier)
 
     tree.clean_wasser_calc()
-    print("clean_wasser_calc: %s seconds" % (time.time() - start_time))
-    start_time = time.time()
     cluster_data = cluster(tree, filters.wasser_error)
-    print("cluster: %s seconds" % (time.time() - start_time))
-    start_time = time.time()
     vars_in_clusters = __calc_in(cluster_data.clusters)
-    print("vars_in_clusters: %s seconds" % (time.time() - start_time))
     cur_mean = cluster_data.clusters[-1].variance
-    return VarianceData("pl", filters.wasser_error, float(cur_mean), vars_in_clusters, cluster_data)
+
+    file_nmis = get_file_nmi(filename)
+
+    return VarianceData("pl", filters.wasser_error, float(cur_mean), vars_in_clusters, cluster_data,
+                        time.time() - start_time, file_nmis)
 
 
 def __calc_in(clusters):

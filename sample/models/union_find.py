@@ -1,5 +1,5 @@
 class Cluster:
-    def __init__(self, id, sz, new_label, vertices):
+    def __init__(self, id, sz, new_label, vertices, old_label):
         self.id = id
         self.sz = sz
         self.new_label = new_label
@@ -7,6 +7,19 @@ class Cluster:
         self.vertices = []
         self.vertices.extend(vertices)
         self.variance = 0
+        self.old_label = old_label
+        self.unified_ids = set([])
+        self.unified_ids.add(id)
+
+    def merge(self, other):
+        self.sz += other.sz
+        self.costs.extend(other.costs)
+        self.unified_ids.add(other.id)
+        self.unified_ids.update(other.unified_ids)
+        self.vertices.extend(other.vertices)
+
+        other.costs = []
+        other.vertices = []
 
 
 class UnionFind:
@@ -24,7 +37,9 @@ class UnionFind:
                 self.max_x = vertex_data[i][0]
             if self.max_y < vertex_data[i][1]:
                 self.max_y = vertex_data[i][1]
-            self.id_sz[i] = Cluster(i, 1, -1, [[float(vertex_data[i][0]), float(vertex_data[i][1])]])
+            self.id_sz[i] = Cluster(i, 1, -1,
+                                    [[float(vertex_data[i][0]), float(vertex_data[i][1])]],
+                                    float(vertex_data[i][2]))
 
     def connected(self, p, q):
         return self.find_root_elem(p) == self.find_root_elem(q)
@@ -49,21 +64,13 @@ class UnionFind:
             return
 
         if self.id_sz[root1].sz < self.id_sz[root2].sz:
-            self.id_sz[root2].sz += self.id_sz[root1].sz
+            self.id_sz[root2].merge(self.id_sz[root1])
             self.id_sz[root2].costs.append(float(w_cost))
-            self.id_sz[root2].costs.extend(self.id_sz[root1].costs)
-            self.id_sz[root1].costs = []
-            self.id_sz[root2].vertices.extend(self.id_sz[root1].vertices)
-            self.id_sz[root1].vertices = []
 
             self.id_sz[root1].id = root2
         else:
-            self.id_sz[root1].sz += self.id_sz[root2].sz
+            self.id_sz[root1].merge(self.id_sz[root2])
             self.id_sz[root1].costs.append(float(w_cost))
-            self.id_sz[root1].costs.extend(self.id_sz[root2].costs)
-            self.id_sz[root2].costs = []
-            self.id_sz[root1].vertices.extend(self.id_sz[root2].vertices)
-            self.id_sz[root2].vertices = []
 
             self.id_sz[root2].id = root1
 

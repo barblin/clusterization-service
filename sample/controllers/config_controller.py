@@ -3,7 +3,7 @@ import json
 from flask import Blueprint
 
 from sample.models.config import SUPPORTED_VIEWS
-from sample.services import datasource
+from sample.services.data import datasource
 
 config_controller = Blueprint('config_controller', __name__)
 

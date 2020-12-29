@@ -8,6 +8,6 @@ variances_controller = Blueprint('variances_controller', __name__)
 
 
 @variances_controller.route('/api/v1/views/variances-plots/files/<filename>')
-def simple_plot_data_for_file(filename):
+def variances_plot(filename):
     filters = extract_query_params()
     return VariancesPlot(cluster_variance.cluster_for_incr_wasser_dist(filename, filters)).jsonify()

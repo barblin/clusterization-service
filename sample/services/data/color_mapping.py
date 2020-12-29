@@ -1,9 +1,12 @@
+from collections import OrderedDict
+
+
 def create_cluster_by_size_decreasing(uf):
     labels = uf.id_sz.copy()
     labels.sort(key=lambda x: x.sz, reverse=True)
 
     j = 0
-    cluster_dict = {}
+    cluster_dict = OrderedDict()
     for i in range(0, 8):
         cluster = labels[i]
 

@@ -1,7 +1,7 @@
 from sample.models.tree import Distance
 from sample.models.union_find import UnionFind
 from sample.services.tree.tree_wasser_distance_unification import unify_by_wasser_distance
-from sample.services.tree_factory import create_tree
+from sample.services.tree.tree_factory import create_tree
 
 
 def create_min_tree(filename, distance, filters):

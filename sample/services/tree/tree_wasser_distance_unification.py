@@ -1,5 +1,5 @@
 from sample.models.union_find import UnionFind
-from sample.services.color.color_mapping import create_cluster_by_size_decreasing
+from sample.services.data.color_mapping import create_cluster_by_size_decreasing
 
 
 def unify_by_wasser_distance(tree):

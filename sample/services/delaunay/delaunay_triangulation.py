@@ -1,7 +1,7 @@
 from scipy.spatial import Delaunay
-from sample.services import datasource
+from sample.services.data import datasource
 from sample.models.plots import TriPlot
-from sample.services.datasource import data_without_labels
+from sample.services.data.datasource import data_without_labels
 
 tri_cache = {}
 delaunay_cache = {}

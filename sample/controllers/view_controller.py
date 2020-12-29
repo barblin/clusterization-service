@@ -5,7 +5,7 @@ from sample.api.minimum_tree_response import MinimumTreeResponse
 from sample.api.request import extract_query_params
 from sample.api.scatter_plot_response import ScatterPlotResponse
 from sample.models.tree import Distance
-from sample.services import datasource
+from sample.services.data import datasource
 from sample.services.delaunay.delaunay_triangulation import triangulation_plot
 from sample.services.tree.minimum_spanning_tree import create_min_tree
 

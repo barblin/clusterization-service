@@ -1,7 +1,8 @@
 from flask import Blueprint
 
-from sample.plotting import plot
-from sample.services import cluster, datasource
+from sample.services.plotting import plot
+from sample.services import cluster
+from sample.services.data import datasource
 
 plot_controller = Blueprint('plot_controller', __name__)
 

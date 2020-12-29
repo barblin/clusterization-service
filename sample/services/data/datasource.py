@@ -5,7 +5,7 @@ import pandas as pd
 from sample.models.plots import ScatterPlot
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-source_location = dir_path + '/../../ressources/syntheticData/'
+source_location = dir_path + '/../../../ressources/syntheticData/'
 default_file = 'waveData_5.csv'
 col_feat_1 = 'feat-1'
 col_feat_2 = 'feat-2'

@@ -12,11 +12,13 @@ Make sure to update the paths in the python code to fit your environment.
 
 
 # Steps to start the service locally
+Install flask in your environment by following these instructions: https://pypi.org/project/Flask/
+
 Open Power shell in your root directory
 
 Set up your controller or app file for flask 
 ```
-$env:FLASK_APP = "./sample/app.py"
+env FLASK_APP=./sample/app.py
 ```
 
 At last

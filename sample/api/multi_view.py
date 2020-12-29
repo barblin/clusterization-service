@@ -1,6 +1,6 @@
 import json
 
-from sample.services.color.color_mapping import create_color_map_by_size_decreasing
+from sample.services.data.color_mapping import create_color_map_by_size_decreasing
 
 
 class MultiView:

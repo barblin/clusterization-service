@@ -1,12 +1,14 @@
 from sample.models.union_find import UnionFind, Cluster
-from sample.services.color.color_mapping import create_cluster_by_size_decreasing
+from sample.services.data.color_mapping import create_cluster_by_size_decreasing
+from sample.services.score.score_service import calc_score_from_clusters
 
 
 class ClusterData:
-    def __init__(self, clusters, max_x, max_y):
+    def __init__(self, clusters, max_x, max_y, nmi):
         self.clusters = clusters
         self.max_x = max_x
         self.max_y = max_y
+        self.nmi = nmi
 
 
 def cluster(tree, wass_err):
@@ -14,7 +16,8 @@ def cluster(tree, wass_err):
     cluster_candidates = unify(tree.point_array, edges)
     sig_clusters = reduce_to_significant(cluster_candidates)
     complete_clusters = add_noise_cluster(sig_clusters, tree, cluster_candidates)
-    return ClusterData(complete_clusters, cluster_candidates.max_x, cluster_candidates.max_y)
+    score = calc_score_from_clusters(complete_clusters, tree.point_array)
+    return ClusterData(complete_clusters, cluster_candidates.max_x, cluster_candidates.max_y, score.nmi)
 
 
 def add_noise_cluster(clusters, tree, union_find):
@@ -28,14 +31,12 @@ def add_noise_cluster(clusters, tree, union_find):
         if not union_find.connected(edge.src, edge.dest):
             union_find.unify(edge.src, edge.dest, edge.wasser_cost)
 
-    noise_cluster = Cluster(-1, 0, 8, [])
+    noise_cluster = Cluster(-1, 0, 8, [], 0)
     already_managed_noise_cluster = {}
     for i in range(0, len(union_find.id_sz)):
         root = union_find.find_root_elem(union_find.id_sz[i].id)
         if root not in clusters.keys() and root not in already_managed_noise_cluster.keys():
-            noise_cluster.sz += union_find.id_sz[root].sz
-            noise_cluster.costs.extend(union_find.id_sz[root].costs)
-            noise_cluster.vertices.extend(union_find.id_sz[root].vertices)
+            noise_cluster.merge(union_find.id_sz[root])
             already_managed_noise_cluster[root] = None
 
     clusters[noise_cluster.id] = noise_cluster
