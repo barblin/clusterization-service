@@ -31,8 +31,7 @@ def calc_score_from_clusters(clusters, point_array):
         actual.append(point_array[i][2])
 
     nmi = __calc_nmi(actual, predicted)
-    dbcv = []  # __calc_dbcv(point_array[:, :2], predicted)
-    print(dbcv)
+    dbcv = []#__calc_dbcv(point_array[:, :2], predicted)
 
     return ScoreData(nmi, dbcv)
 

@@ -92,12 +92,15 @@ class DistanceTree:
 
         for edge in self.edges:
             src_neighs = self.neighbours[edge.src]
-            dest_neighs = self.neighbours[edge.src]
+            dest_neighs = self.neighbours[edge.dest]
 
             cutoff_src = calc_cutoff(src_neighs, stdv_multiplier)
             cutoff_dest = calc_cutoff(dest_neighs, stdv_multiplier)
 
             if edge.cost <= cutoff_src and edge.cost <= cutoff_dest:
                 filtered_edges.append(edge)
+            else:
+                self.neighbours[edge.src] = [x for x in src_neighs if (x <= cutoff_src)]
+                self.neighbours[edge.dest] = [x for x in dest_neighs if (x <= cutoff_dest)]
 
         self.edges = filtered_edges

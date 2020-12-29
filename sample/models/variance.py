@@ -4,7 +4,7 @@ import numpy as np
 
 
 class VarianceData:
-    def __init__(self, id, wasser_margin, variance, in_variances, plot, runtime, nmis):
+    def __init__(self, id, wasser_margin, variance, in_variances, plot, runtime, nmis, overall_time):
         cluster_array = []
 
         self.sum_sz = 0
@@ -28,9 +28,10 @@ class VarianceData:
         self.data = cluster_array
         self.significant = False
         self.nmi = plot.nmi
-        self.runtime = runtime
+        self.runtime = float(runtime)
         self.skinny_nmi = float(nmis.skinny)
         self.ada_nmi = float(nmis.ada)
+        self.overall_time = float(overall_time)
 
     def jsonify(self):
         return json.dumps(self.__dict__)

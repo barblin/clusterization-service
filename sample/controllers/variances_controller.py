@@ -1,3 +1,5 @@
+from datetime import time
+
 from flask import Blueprint
 
 from sample.api.request import extract_query_params
