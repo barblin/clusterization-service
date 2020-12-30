@@ -13,8 +13,8 @@ class MinTreeWasserScatterPlot:
         self.max_Y = 0
 
         for edge in wasser_scatter_plot.edges:
-            self.__create_point(edge.point1, edge.src, labels, color_dict)
-            self.__create_point(edge.point2, edge.dest, labels, color_dict)
+            self.__create_point(edge.vertex1, edge.src, labels, color_dict)
+            self.__create_point(edge.vertex2, edge.dest, labels, color_dict)
 
         self.processed_points = None
 

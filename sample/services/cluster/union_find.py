@@ -6,7 +6,7 @@ class Cluster:
         self.costs = []
         self.vertices = []
         self.vertices.extend(vertices)
-        self.variance = 0
+        self.var = 0
         self.old_label = old_label
         self.unified_ids = set([])
         self.unified_ids.add(id)
@@ -18,7 +18,9 @@ class Cluster:
         self.unified_ids.update(other.unified_ids)
         self.vertices.extend(other.vertices)
 
+        other.sz = 0
         other.costs = []
+        other.unified_ids = set([])
         other.vertices = []
 
 

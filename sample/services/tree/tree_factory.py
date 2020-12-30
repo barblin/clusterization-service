@@ -1,7 +1,9 @@
-from sample.models.tree import DistanceTree, Edge, Vertex
+from sample.models.edge import Edge
+from sample.models.vertex import Vertex
+from sample.services.tree.tree import DistanceTree
 from sample.services.data.datasource import load_file, data_without_labels
 from sample.services.delaunay.delaunay_triangulation import triangulate_delaunay
-from sample.services.linear_algebra import two_d_distance
+from sample.services.math import two_d_distance
 
 
 def create_tree(filename):

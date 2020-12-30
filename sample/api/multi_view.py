@@ -21,8 +21,8 @@ class MultiView:
         color_dict = create_color_map_by_size_decreasing(labels.copy())
 
         for edge in wasser_scatter_plot.edges:
-            self.__create_point(edge.point1, edge.src, labels, color_dict)
-            self.__create_point(edge.point2, edge.dest, labels, color_dict)
+            self.__create_point(edge.vertex1, edge.src, labels, color_dict)
+            self.__create_point(edge.vertex2, edge.dest, labels, color_dict)
 
         self.processed_points = None
 

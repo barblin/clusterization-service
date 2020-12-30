@@ -1,38 +1,8 @@
 import sys
-from enum import Enum
 
-import numpy as np
 from scipy.stats import wasserstein_distance
 
-
-class Distance(Enum):
-    WASSER = "wasser"
-    DIRECT = "direct"
-
-
-class Vertex:
-    def __init__(self, coords):
-        self.coords = coords
-
-
-class Edge:
-    def __init__(self, src, dest, cost, point1, point2):
-        self.src = src
-        self.dest = dest
-        self.cost = cost
-        self.point1 = point1
-        self.point2 = point2
-        self.wasser_cost = 0
-        self.average_neighbour_cost = 0
-
-
-def calc_cutoff(neighs, stdv_multiplier):
-    value = neighs
-    arr = np.array(value)
-    mean = np.mean(arr)
-    sd = np.std(arr)
-
-    return mean + stdv_multiplier * sd
+from sample.services.math import calc_cutoff
 
 
 class DistanceTree:
@@ -45,6 +15,12 @@ class DistanceTree:
         self.max_wasser = 0
 
     def add_edge(self, edge):
+        if edge.wasser_cost < self.min_wasser:
+            self.min_wasser = edge.wasser_cost
+
+        if self.max_wasser < edge.wasser_cost:
+            self.max_wasser = edge.wasser_cost
+
         self.edges.append(edge)
 
         if edge.src in self.neighbours.keys():
@@ -78,14 +54,6 @@ class DistanceTree:
 
             if self.max_wasser < edge.wasser_cost:
                 self.max_wasser = edge.wasser_cost
-
-    def flatten_neighbours(self, stdv_multiplier):
-        for key in self.neighbours.keys():
-            value = self.neighbours[key]
-            cutoff = calc_cutoff(value, stdv_multiplier)
-            value = [x for x in value if (x <= cutoff)]
-
-            self.neighbours[key] = value
 
     def remove_outliers(self, stdv_multiplier):
         filtered_edges = []

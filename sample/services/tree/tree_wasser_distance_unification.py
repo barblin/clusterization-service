@@ -1,4 +1,4 @@
-from sample.models.union_find import UnionFind
+from sample.services.cluster.union_find import UnionFind
 from sample.services.data.color_mapping import create_cluster_by_size_decreasing
 
 

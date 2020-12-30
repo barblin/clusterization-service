@@ -4,7 +4,7 @@ import numpy as np
 
 
 class VarianceData:
-    def __init__(self, id, wasser_margin, variance, in_variances, plot, runtime, nmis, overall_time):
+    def __init__(self, id, wasser_margin, variance, plot, runtime, nmis, overall_time):
         cluster_array = []
 
         self.sum_sz = 0
@@ -17,12 +17,11 @@ class VarianceData:
                 int(clus.sz),
                 clus.vertices,
                 np.sum(clus.costs),
-                clus.variance))
+                clus.var))
 
         self.identity = id
         self.wasser_margin = float(wasser_margin)
         self.cluster_variance = variance
-        self.in_cluster_variances = in_variances
         self.max_X = plot.max_x
         self.max_Y = plot.max_x
         self.data = cluster_array

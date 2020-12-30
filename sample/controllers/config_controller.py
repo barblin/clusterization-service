@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint
 
-from sample.models.config import SUPPORTED_VIEWS
+from sample.config.config import SUPPORTED_VIEWS
 from sample.services.data import datasource
 
 config_controller = Blueprint('config_controller', __name__)
@@ -15,7 +15,7 @@ def version():
 
 @config_controller.route('/api/v1/files')
 def get_files():
-    return json.dumps(datasource.files())
+    return json.dumps(datasource.list_files())
 
 
 @config_controller.route('/api/v1/views')

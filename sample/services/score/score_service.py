@@ -2,7 +2,7 @@ import numpy
 from scipy.spatial.distance import euclidean
 from sklearn.metrics.cluster import normalized_mutual_info_score
 
-from sample.models.config import FILE_NMIS
+from sample.config.config import FILE_NMIS
 from sample.services.score.dbcv import DBCV
 
 

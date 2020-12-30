@@ -1,5 +1,5 @@
 from sample.models.plots import MinTreeWasserClusterPlot
-from sample.models.union_find import UnionFind
+from sample.services.cluster.union_find import UnionFind
 
 
 def unify_by_wasser_distnace(tree, filters):

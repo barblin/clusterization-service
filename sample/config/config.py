@@ -1,11 +1,12 @@
+import os
+
 SIMPLE_PLOT = "simple-plots"
-CLUSTER = "clusters"
 DELAUNAY_TRIANGULATION = "delaunay-triangulation"
-MINIMUM_SPANNING_TREE = "minimum-spanning-tree"
-MINIMUM_SPANNING_TREE_WASSER = "minimum-spanning-tree-wasser"
-MIN_TREE_WASSER_CLUSTER = "clusters-min-tree-wasser"
-TRIPLE_PLOTS = "multi-plots"
-VARIANCES_PLOTS = "variances-plots"
+MINIMUM_SPANNING_TREE = "min-span-tree"
+MINIMUM_SPANNING_TREE_WASSER = "min-span-tree-wasser"
+MIN_TREE_WASSER_CLUSTER = "cluster"
+TRIPLE_PLOTS = "cluster-compare"
+VARIANCES_PLOTS = "scores"
 
 SUPPORTED_VIEWS = [[SIMPLE_PLOT, "Scatter plot original data"],
                    [DELAUNAY_TRIANGULATION, "Delaunay Triangulation"],
@@ -38,3 +39,15 @@ FILE_NMIS = {
     "waveData_8.csv": {"skinny": 0.42, "ada": 0.71},
     "waveData_9.csv": {"skinny": 0.2, "ada": 0.55},
 }
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+source_location = dir_path + '/../../ressources/syntheticData/'
+edge_location = dir_path + '/../../ressources/edges/'
+
+
+def resources():
+    return source_location
+
+
+def edges_location():
+    return edge_location
