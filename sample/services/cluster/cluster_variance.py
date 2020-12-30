@@ -48,5 +48,5 @@ def cluster_for_wasser_dist(filename, filters):
     cluster_data = cluster(tree, filters.wasser_error)
     file_nmis = get_file_nmi(filename)
 
-    return VarianceData(filename, filters.wasser_error, 0, 0, cluster_data, time.time() - start_time, file_nmis,
+    return VarianceData(filename, filters.wasser_error, 0, cluster_data, time.time() - start_time, file_nmis,
                         time.time() - start_time)
