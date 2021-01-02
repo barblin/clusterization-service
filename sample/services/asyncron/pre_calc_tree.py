@@ -21,5 +21,7 @@ def __calc():
 
         print("wasser calculation for " + filename)
         tree.clean_wasser_calc()
+        print("sort edges for " + filename)
+        tree.sort_wasser()
         print("store edges for " + filename)
         store_edges(tree.edges, filename)

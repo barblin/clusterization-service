@@ -1,4 +1,4 @@
-from sample.services.cluster.union_find import UnionFind, Cluster
+from sample.services.cluster.union_find import Cluster
 from sample.services.data.color_mapping import create_cluster_by_size_decreasing
 from sample.services.score.score_service import calc_score_from_clusters
 
@@ -11,9 +11,9 @@ class ClusterData:
         self.nmi = nmi
 
 
-def cluster(tree, wass_err):
-    edges = filter_by_wasser_dist(tree, wass_err)
-    cluster_candidates = unify(tree.point_array, edges)
+def cluster(union_find, tree, wass_err):
+    wasser_range = calc_error_range(tree, wass_err)
+    cluster_candidates = unify(union_find, tree.edges, wasser_range)
     sig_clusters = reduce_to_significant(cluster_candidates)
     complete_clusters = add_noise_cluster(sig_clusters, tree, cluster_candidates)
     score = calc_score_from_clusters(complete_clusters, tree.point_array)
@@ -21,47 +21,47 @@ def cluster(tree, wass_err):
 
 
 def add_noise_cluster(clusters, tree, union_find):
+    noise_cluster = Cluster(-1, 0, 8, [], 0)
+    already_managed_noise_cluster = {}
+
     for edge in tree.edges:
         root_src = union_find.find_root_elem(edge.src)
         root_dest = union_find.find_root_elem(edge.dest)
 
-        if root_src in clusters.keys() or root_dest in clusters.keys():
-            continue
-
         if not union_find.connected(edge.src, edge.dest):
-            union_find.unify(edge.src, edge.dest, edge.wasser_cost)
+            if root_src not in clusters.keys() and root_src not in already_managed_noise_cluster:
+                union_find.id_sz[root_src].new_label = -1
+                noise_cluster.merge(union_find.id_sz[root_src])
+                already_managed_noise_cluster[root_src] = None
 
-    noise_cluster = Cluster(-1, 0, 8, [], 0)
-    already_managed_noise_cluster = {}
-    for i in range(0, len(union_find.id_sz)):
-        root = union_find.find_root_elem(union_find.id_sz[i].id)
-        if root not in clusters.keys() and root not in already_managed_noise_cluster.keys():
-            noise_cluster.merge(union_find.id_sz[root])
-            already_managed_noise_cluster[root] = None
+            if root_dest not in clusters.keys() and root_dest not in already_managed_noise_cluster:
+                union_find.id_sz[root_dest].new_label = -1
+                noise_cluster.merge(union_find.id_sz[root_dest])
+                already_managed_noise_cluster[root_dest] = None
 
     clusters[noise_cluster.id] = noise_cluster
 
     return clusters
 
 
-def filter_by_wasser_dist(tree, wasser_error):
+def calc_error_range(tree, wasser_error):
     err_margin = (tree.max_wasser - tree.min_wasser) * wasser_error
     error_range = tree.min_wasser + err_margin
 
-    filtered_edges = []
-    for edge in tree.edges:
-        if __wasser_cost_in_range(edge.wasser_cost, error_range):
-            filtered_edges.append(edge)
-
-    return filtered_edges
+    return error_range
 
 
-def unify(point_array, filtered_edges):
-    union_find = UnionFind(point_array)
+def unify(union_find, filtered_edges, error_range):
+    start = union_find.offset
 
-    for edge in filtered_edges:
+    for i in range(start, len(filtered_edges)):
+        edge = filtered_edges[i]
+
         if edge.wasser_cost == -1:
             continue
+        if not __wasser_cost_in_range(edge.wasser_cost, error_range):
+            union_find.offset = i
+            break
         if not union_find.connected(edge.src, edge.dest):
             union_find.unify(edge.src, edge.dest, edge.wasser_cost)
 

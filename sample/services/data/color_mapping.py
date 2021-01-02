@@ -8,8 +8,7 @@ def create_cluster_by_size_decreasing(uf):
     j = 0
     cluster_dict = OrderedDict()
     for i in range(0, 8):
-        cluster = labels[i]
-
+        cluster = labels[i].clone()
         if cluster.id not in cluster_dict.keys():
             cluster.new_label = j
             cluster_dict[cluster.id] = cluster

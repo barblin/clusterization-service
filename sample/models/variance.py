@@ -8,13 +8,15 @@ class VarianceData:
         cluster_array = []
 
         self.sum_sz = 0
+
         for key in plot.clusters.keys():
             clus = plot.clusters[key]
-            self.sum_sz += clus.sz
+            self.sum_sz += len(clus.vertices)
+
             cluster_array.append((
                 int(clus.id),
                 int(clus.new_label),
-                int(clus.sz),
+                int(len(clus.vertices)),
                 clus.vertices,
                 np.sum(clus.costs),
                 clus.var))

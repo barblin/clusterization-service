@@ -28,10 +28,10 @@ def calc_score_from_clusters(clusters, point_array):
             cluster = clusters[key]
             if i in cluster.unified_ids:
                 predicted[i] = cluster.old_label
-        actual.append(point_array[i][2])
+        actual.append(int(point_array[i][2]))
 
     nmi = __calc_nmi(actual, predicted)
-    dbcv = []#__calc_dbcv(point_array[:, :2], predicted)
+    dbcv = []  # __calc_dbcv(point_array[:, :2], predicted)
 
     return ScoreData(nmi, dbcv)
 

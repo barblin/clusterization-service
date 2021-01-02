@@ -18,10 +18,11 @@ class Cluster:
         self.unified_ids.update(other.unified_ids)
         self.vertices.extend(other.vertices)
 
-        other.sz = 0
-        other.costs = []
-        other.unified_ids = set([])
-        other.vertices = []
+    def clone(self):
+        clone = Cluster(self.id, self.sz, self.new_label, self.vertices.copy(), self.old_label)
+        clone.costs = self.costs.copy()
+        clone.unified_ids = self.unified_ids.copy()
+        return clone
 
 
 class UnionFind:
@@ -32,6 +33,7 @@ class UnionFind:
         self.num_components = size
         self.max_x = 0
         self.max_y = 0
+        self.offset = 0
 
         self.id_sz = [None] * size
         for i in range(0, size):
@@ -41,7 +43,7 @@ class UnionFind:
                 self.max_y = vertex_data[i][1]
             self.id_sz[i] = Cluster(i, 1, -1,
                                     [[float(vertex_data[i][0]), float(vertex_data[i][1])]],
-                                    float(vertex_data[i][2]))
+                                    int(vertex_data[i][2]))
 
     def connected(self, p, q):
         return self.find_root_elem(p) == self.find_root_elem(q)

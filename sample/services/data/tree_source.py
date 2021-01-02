@@ -32,7 +32,6 @@ def store_edges(edges, filename):
 
 def load_edges(filename):
     content = __read(edge_pre + filename)
-
     lines = content.splitlines()
 
     edges = []
