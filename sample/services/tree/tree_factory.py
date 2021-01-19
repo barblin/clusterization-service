@@ -37,4 +37,6 @@ def __create_tree(filename):
         tree.add_edge(edge2)
         tree.add_edge(edge3)
 
+    tree.calc_neighbours()
+
     return tree
