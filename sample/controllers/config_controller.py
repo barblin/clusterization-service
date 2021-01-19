@@ -15,7 +15,7 @@ def version():
 
 @config_controller.route('/api/v1/files')
 def get_files():
-    return json.dumps(datasource.list_files())
+    return json.dumps(sorted(datasource.list_files()))
 
 
 @config_controller.route('/api/v1/views')

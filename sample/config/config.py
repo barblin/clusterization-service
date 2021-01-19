@@ -13,7 +13,6 @@ SUPPORTED_VIEWS = [[SIMPLE_PLOT, "Scatter plot original data"],
                    [MINIMUM_SPANNING_TREE, "Minimum spanning tree 2D"],
                    [MINIMUM_SPANNING_TREE_WASSER, "Min tree by Wasserstein distance"],
                    [MIN_TREE_WASSER_CLUSTER, "Cluster by Wasserstein distance"],
-                   [TRIPLE_PLOTS, "Cluster scores"],
                    [VARIANCES_PLOTS, "Cluster scores for range"]]
 SUPPORTED_ALGOS = []
 

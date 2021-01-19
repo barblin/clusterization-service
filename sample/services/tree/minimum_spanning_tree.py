@@ -33,9 +33,6 @@ def compute_wasser_tree(filename, filters):
         return tree
 
     tree = get_and_prep_tree(filename, filters)
-    if filters.remove_outliers:
-        tree.remove_outliers(filters.stdv_multiplier)
-
     tree.clean_wasser_calc()
     tree.sort_wasser()
     return tree

@@ -1,6 +1,6 @@
-import math
-
 import numpy as np
+
+import math
 
 
 def two_d_distance(x1, y1, x2, y2):
