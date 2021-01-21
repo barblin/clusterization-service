@@ -42,6 +42,7 @@ FILE_NMIS = {
 dir_path = os.path.dirname(os.path.realpath(__file__))
 source_location = dir_path + '/../../ressources/syntheticData/'
 edge_location = dir_path + '/../../ressources/edges/'
+var_location = dir_path + '/../../ressources/variances/'
 
 
 def resources():
@@ -50,3 +51,7 @@ def resources():
 
 def edges_location():
     return edge_location
+
+
+def variances_location():
+    return var_location

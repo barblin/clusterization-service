@@ -3,14 +3,18 @@ import time
 import numpy as np
 
 from sample.models.variance import VarianceData
+from sample.models.variance_plot import VariancePlot
 from sample.services.cluster.cluster_wasser import cluster
 from sample.services.cluster.union_find import UnionFind
+from sample.services.data.variance_source import delete_repo, store, load
 from sample.services.math import variance
 from sample.services.score.score_service import get_file_nmi
 from sample.services.tree.minimum_spanning_tree import compute_wasser_tree
 
 
 def cluster_for_incr_wasser_dist(filename, filters):
+    delete_repo()
+
     overall_time = time.time()
     start_time = overall_time
 
@@ -37,14 +41,26 @@ def cluster_for_incr_wasser_dist(filename, filters):
             cur_max_nmi = cluster_data.nmi
             harmonic_clus_idx = cur_idx
 
-        sig_variances[cur_idx] = VarianceData(filename + str(cur_idx), float(i), float(cur_var),
-                                              cluster_data, time.time() - start_time, file_nmis,
-                                              time.time() - overall_time)
+        identity = "v" + str(cur_idx) + filename
+        variance_data = VarianceData(identity, float(i), float(cur_var),
+                                     cluster_data, time.time() - start_time, file_nmis,
+                                     time.time() - overall_time)
+        variance_plot = VariancePlot(identity, float(i), float(cur_var),
+                                     cluster_data, time.time() - start_time, file_nmis,
+                                     time.time() - overall_time)
+
+        sig_variances[cur_idx] = variance_data
+        store(variance_plot)
+
         start_time = time.time()
         cur_idx += 1
 
     sig_variances[harmonic_clus_idx].significant = True
     return sig_variances
+
+
+def load_plot(identity):
+    return load(identity)
 
 
 def cluster_for_wasser_dist(filename, filters):
