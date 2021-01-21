@@ -7,6 +7,11 @@ python3 -V
 apt install python3-venv
 python3 -m venv venv
 
+source venv/bin/activate
+pip install Flask
+pip install -r requirements.txt
+deactivate
+
 echo "Preprocess edges? [Y/N]:"
 read pre_edges
 
@@ -15,8 +20,5 @@ if [ "$pre_edges" == "Y" ] || [ "$pre_edges" == "y" ]; then
 fi
 
 source venv/bin/activate
-pip install Flask
-pip install -r requirements.txt
-
 export FLASK_APP=./sample/app.py
 flask run

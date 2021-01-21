@@ -41,9 +41,6 @@ def compute_wasser_tree(filename, filters):
 def get_and_prep_tree(filename, filters):
     tree = create_tree(filename)
 
-    if filters.normalize_neigh_dist is True:
-        tree.normalize_neighbours()
-
     return tree
 
 
