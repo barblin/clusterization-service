@@ -7,14 +7,15 @@ def create_cluster_by_size_decreasing(uf):
 
     j = 0
     cluster_dict = OrderedDict()
-    for i in range(0, 8):
+    for i in range(0, len(labels)):
         cluster = labels[i].clone()
-        if cluster.id not in cluster_dict.keys():
+        if cluster.id not in cluster_dict.keys() and cluster.sz >= 200:
             cluster.new_label = j
             cluster_dict[cluster.id] = cluster
             j += 1
 
-        i += 1
+        if j == 8:
+            break
 
     return cluster_dict
 

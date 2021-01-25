@@ -1,7 +1,10 @@
 import sys
+
 from scipy.stats import wasserstein_distance
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import RobustScaler
+
+from sample.config.config import FILE_NEIGHS
 
 
 class DistanceTree:
@@ -22,11 +25,11 @@ class DistanceTree:
 
         self.edges.append(edge)
 
-    def calc_neighbours(self):
+    def calc_neighbours(self, filename):
         points = self.point_array[:, 0:2]
         scaled_data = RobustScaler().fit_transform(points)
 
-        knn = NearestNeighbors(n_neighbors=250, algorithm='ball_tree').fit(scaled_data)
+        knn = NearestNeighbors(n_neighbors=FILE_NEIGHS[filename], algorithm='ball_tree').fit(scaled_data)
         distances, indices = knn.kneighbors(scaled_data)
 
         for i in range(0, len(distances)):
@@ -46,7 +49,8 @@ class DistanceTree:
         if not self.neighbours[edge.src] or not self.neighbours[edge.dest]:
             edge.wasser_cost = -1
         else:
-            edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src], self.neighbours[edge.dest])
+            edge.wasser_cost = wasserstein_distance(self.neighbours[edge.src],
+                                                    self.neighbours[edge.dest])
 
             if edge.wasser_cost < self.min_wasser:
                 self.min_wasser = edge.wasser_cost

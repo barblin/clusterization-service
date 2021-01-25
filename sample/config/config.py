@@ -39,6 +39,30 @@ FILE_NMIS = {
     "waveData_9.csv": {"skinny": 0.2, "ada": 0.55},
 }
 
+FILE_NEIGHS = {
+    "CutESC.csv": 20,
+    "skinnyDipData_0.csv": 5,
+    "skinnyDipData_1.csv": 50,
+    "skinnyDipData_2.csv": 100,
+    "skinnyDipData_3.csv": 200,
+    "skinnyDipData_4.csv": 200,
+    "skinnyDipData_5.csv": 250,
+    "skinnyDipData_6.csv": 250,
+    "skinnyDipData_7.csv": 150,
+    "skinnyDipData_8.csv": 300,
+    "skinnyDipData_9.csv": 450,
+    "waveData_0.csv": 30,
+    "waveData_1.csv": 30,
+    "waveData_2.csv": 30,
+    "waveData_3.csv": 35,
+    "waveData_4.csv": 100,
+    "waveData_5.csv": 200,
+    "waveData_6.csv": 200,
+    "waveData_7.csv": 350,
+    "waveData_8.csv": 350,
+    "waveData_9.csv": 450,
+}
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 source_location = dir_path + '/../../ressources/syntheticData/'
 edge_location = dir_path + '/../../ressources/edges/'

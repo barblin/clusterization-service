@@ -1,13 +1,8 @@
-class ClusterFilters:
-    def __init__(self, num_clusters,
-                 wasser_error,
+class UserSettings:
+    def __init__(self, wasser_error,
                  vars_from,
                  vars_until,
                  vars_step_size):
-        if num_clusters is None:
-            self.num_clusters = 6
-        else:
-            self.num_clusters = int(num_clusters)
 
         if wasser_error is None:
             self.wasser_error = 0

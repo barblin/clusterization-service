@@ -5,13 +5,20 @@ from sample.services.data.tree_source import store_edges
 from sample.services.tree.tree_factory import create_tree
 
 
-def issue():
-    x = threading.Thread(target=__calc)
+def issue(offset=0):
+    x = threading.Thread(target=__calc, args=[offset])
     x.start()
 
 
-def __calc():
-    for filename in list_files():
+def __calc(offset):
+    files = list_files()
+    files.sort(reverse=True)
+
+    for filename in files:
+        if offset > 0:
+            offset -= 1
+            continue
+
         print("create tree for " + filename)
         tree = create_tree(filename)
         print("wasser calculation for " + filename)
