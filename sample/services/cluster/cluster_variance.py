@@ -18,7 +18,7 @@ def cluster_for_incr_wasser_dist(filename, filters):
     overall_time = time.time()
     start_time = overall_time
 
-    tree = compute_wasser_tree(filename, filters)
+    tree = compute_wasser_tree(filename)
     union_find = UnionFind(tree.point_array)
     file_nmis = get_file_nmi(filename)
 
@@ -65,10 +65,10 @@ def load_plot(identity):
 
 def cluster_for_wasser_dist(filename, filters):
     start_time = time.time()
-    tree = compute_wasser_tree(filename, filters)
+    tree = compute_wasser_tree(filename)
     union_find = UnionFind(tree.point_array)
     cluster_data = cluster(union_find, tree, filters.wasser_error)
     file_nmis = get_file_nmi(filename)
 
-    return VarianceData(filename, filters.wasser_error, 0, cluster_data, time.time() - start_time, file_nmis,
+    return VariancePlot(filename, filters.wasser_error, 0, cluster_data, time.time() - start_time, file_nmis,
                         time.time() - start_time)

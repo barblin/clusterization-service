@@ -1,20 +1,12 @@
 from sample.models.edge import Edge
 from sample.models.vertex import Vertex
-from sample.services.tree.tree import DistanceTree
 from sample.services.data.datasource import load_file, data_without_labels
 from sample.services.delaunay.delaunay_triangulation import triangulate_delaunay
 from sample.services.math import two_d_distance
+from sample.services.tree.tree import DistanceTree
 
 
 def create_tree(filename):
-    return __fetch_tree(filename)
-
-
-def __fetch_tree(filename):
-    return __create_tree(filename)
-
-
-def __create_tree(filename):
     df = load_file(filename)
     point_array = df.to_numpy()
     tri = triangulate_delaunay(filename, data_without_labels(df))

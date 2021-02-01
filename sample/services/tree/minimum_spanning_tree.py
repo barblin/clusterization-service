@@ -11,15 +11,15 @@ def create_min_tree(filename, distance, filters):
     if distance is Distance.WASSER:
         return cluster_min_tree(filename, filters)
     else:
-        tree = get_and_prep_tree(filename, filters)
+        tree = get_and_prep_tree(filename)
         return __minimum_eucledian_tree(tree, UnionFind(tree.point_array))
 
 
-def cluster_min_tree(filename, filters):
-    return unify_by_wasser_distance(get_and_prep_tree(filename, filters))
+def cluster_min_tree(filename):
+    return unify_by_wasser_distance(get_and_prep_tree(filename))
 
 
-def compute_wasser_tree(filename, filters):
+def compute_wasser_tree(filename):
     edges = load_edges(filename)
 
     if 0 < len(edges):
@@ -32,13 +32,13 @@ def compute_wasser_tree(filename, filters):
 
         return tree
 
-    tree = get_and_prep_tree(filename, filters)
+    tree = get_and_prep_tree(filename)
     tree.clean_wasser_calc()
     tree.sort_wasser()
     return tree
 
 
-def get_and_prep_tree(filename, filters):
+def get_and_prep_tree(filename):
     tree = create_tree(filename)
 
     return tree

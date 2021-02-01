@@ -11,8 +11,6 @@ cluster_controller = Blueprint('cluster_controller', __name__)
 
 @cluster_controller.route('/api/v1/views/' + MIN_TREE_WASSER_CLUSTER + '/files/<filename>')
 def clusters_min_tree_wasser_for_file(filename):
-    start_time = time.time()
     filters = extract_query_params()
     dings = cluster_for_wasser_dist(filename, filters).jsonify()
-    print("--- %s seconds ---" % (time.time() - start_time))
     return dings
