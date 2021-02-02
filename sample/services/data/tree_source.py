@@ -1,8 +1,9 @@
 import os
 
+from cluswasser.models.edge import Edge
+from cluswasser.models.vertex import Vertex
+
 from sample.config.config import edges_location
-from sample.models.edge import Edge
-from sample.models.vertex import Vertex
 
 
 def store(tree, filename):

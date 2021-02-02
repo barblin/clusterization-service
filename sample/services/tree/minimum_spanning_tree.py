@@ -1,22 +1,23 @@
+from cluswasser.tree import DistanceTree, create_tree
+from cluswasser.union_find import UnionFind
+
+from sample.config.config import FILE_NEIGHS
 from sample.models.enums.distance import Distance
-from sample.services.cluster.union_find import UnionFind
-from sample.services.data.datasource import load_file
+from sample.services.cluster.cluster_variance import fetch_edges
+from sample.services.data.datasource import load_file, to_features, to_labels
 from sample.services.data.tree_source import load_edges
-from sample.services.tree.tree import DistanceTree
-from sample.services.tree.tree_factory import create_tree
-from sample.services.tree.tree_wasser_distance_unification import unify_by_wasser_distance
+from sample.services.tree.tree_wasser_distance_unification import unify_wasser
 
 
-def create_min_tree(filename, distance, filters):
+def create_min_tree(filename, distance):
+    data = load_file(filename)
+    labels = to_labels(data)
+
     if distance is Distance.WASSER:
-        return cluster_min_tree(filename, filters)
+        return unify_wasser(get_and_prep_tree(filename), labels)
     else:
         tree = get_and_prep_tree(filename)
-        return __minimum_eucledian_tree(tree, UnionFind(tree.point_array))
-
-
-def cluster_min_tree(filename):
-    return unify_by_wasser_distance(get_and_prep_tree(filename))
+        return __minimum_eucledian_tree(tree, UnionFind(tree.features, labels))
 
 
 def compute_wasser_tree(filename):
@@ -33,15 +34,19 @@ def compute_wasser_tree(filename):
         return tree
 
     tree = get_and_prep_tree(filename)
-    tree.clean_wasser_calc()
-    tree.sort_wasser()
     return tree
 
 
 def get_and_prep_tree(filename):
-    tree = create_tree(filename)
+    edges = fetch_edges(filename)
 
-    return tree
+    data = load_file(filename)
+    features = to_features(data)
+
+    if 0 < len(edges):
+        return DistanceTree(features, edges)
+
+    return create_tree(features, FILE_NEIGHS[filename])
 
 
 def __minimum_eucledian_tree(tree, union_find):

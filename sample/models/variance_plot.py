@@ -4,31 +4,31 @@ import numpy as np
 
 
 class VariancePlot:
-    def __init__(self, id, wasser_margin, variance, plot, runtime, nmis, overall_time):
+    def __init__(self, id, wasser_margin, variance, plot, runtime, nmis, overall_time, nmi):
         cluster_array = []
 
         self.sum_sz = 0
 
         for key in plot.clusters.keys():
             clus = plot.clusters[key]
-            self.sum_sz += len(clus.vertices)
+            self.sum_sz += len(clus.features)
 
             cluster_array.append((
-                int(clus.id),
+                int(clus.identity),
                 int(clus.new_label),
-                int(len(clus.vertices)),
-                clus.vertices,
+                int(len(clus.features)),
+                clus.features,
                 np.sum(clus.costs),
-                clus.var))
+                0))
 
         self.identity = id
         self.wasser_margin = float(wasser_margin)
         self.cluster_variance = variance
-        self.max_X = plot.max_x
-        self.max_Y = plot.max_x
+        self.max_X = float(plot.max_features[0])
+        self.max_Y = float(plot.max_features[1])
         self.data = cluster_array
         self.significant = False
-        self.nmi = plot.nmi
+        self.nmi = nmi
         self.runtime = float(runtime)
         self.skinny_nmi = float(nmis.skinny)
         self.ada_nmi = float(nmis.ada)

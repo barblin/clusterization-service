@@ -26,12 +26,11 @@ def delaunay_triangulation_data_for_file(filename):
 
 @view_controller.route('/api/v1/views/' + MINIMUM_SPANNING_TREE + '/files/<filename>')
 def minimum_spanning_tree_for_file(filename):
-    filters = extract_query_params()
-    return MinimumTreeResponse(create_min_tree(filename, Distance.DIRECT, filters)).jsonify()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.DIRECT)).jsonify()
 
 
 @view_controller.route('/api/v1/views/' + MINIMUM_SPANNING_TREE_WASSER + '/files/<filename>')
 def minimum_spanning_tree_wasser_for_file(filename):
     filters = extract_query_params()
     filters.wasser_error = 10000
-    return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER, filters)).jsonify()
+    return MinimumTreeResponse(create_min_tree(filename, Distance.WASSER)).jsonify()

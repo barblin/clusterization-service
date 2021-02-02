@@ -1,8 +1,10 @@
 import threading
 
-from sample.services.data.datasource import list_files
+from cluswasser.tree import create_tree
+
+from sample.config.config import FILE_NEIGHS
+from sample.services.data.datasource import list_files, load_file, to_features
 from sample.services.data.tree_source import store_edges
-from sample.services.tree.tree_factory import create_tree
 
 
 def issue(offset=0):
@@ -19,11 +21,9 @@ def __calc(offset):
             offset -= 1
             continue
 
+        data = load_file(filename)
+        features = to_features(data)
         print("create tree for " + filename)
-        tree = create_tree(filename)
-        print("wasser calculation for " + filename)
-        tree.clean_wasser_calc()
-        print("sort edges for " + filename)
-        tree.sort_wasser()
+        tree = create_tree(features, FILE_NEIGHS[filename])
         print("store edges for " + filename)
         store_edges(tree.edges, filename)

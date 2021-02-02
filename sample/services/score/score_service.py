@@ -18,8 +18,8 @@ class FileNmis:
         self.ada = ada
 
 
-def calc_score_from_clusters(clusters, point_array):
-    size = len(point_array)
+def calc_score_from_clusters(clusters, labels):
+    size = len(labels)
 
     actual = []
     predicted = [-1] * size
@@ -28,7 +28,7 @@ def calc_score_from_clusters(clusters, point_array):
             cluster = clusters[key]
             if i in cluster.unified_ids:
                 predicted[i] = cluster.old_label
-        actual.append(int(point_array[i][2]))
+        actual.append(int(labels[i]))
 
     nmi = __calc_nmi(actual, predicted)
     dbcv = []  # __calc_dbcv(point_array[:, :2], predicted)

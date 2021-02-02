@@ -4,3 +4,4 @@
 /ressources/variances/
 **/__pycache__/
 *.pyc
+*.whl

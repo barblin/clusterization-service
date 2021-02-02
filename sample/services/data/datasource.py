@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+import numpy as np
 
 from sample.config.config import resources
 from sample.models.plots import ScatterPlot
@@ -28,6 +29,16 @@ def load_scatter_plot(filename):
 
 def data_without_labels(df):
     modified = df[[col_feat_1, col_feat_2]]
+    return modified.to_numpy()
+
+
+def to_features(df):
+    modified = df[[col_feat_1, col_feat_2]]
+    return modified.to_numpy()
+
+
+def to_labels(df):
+    modified = df[[col_labels]]
     return modified.to_numpy()
 
 

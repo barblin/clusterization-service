@@ -1,15 +1,8 @@
-from sample.services.cluster.union_find import UnionFind
-from sample.services.data.color_mapping import create_cluster_by_size_decreasing
+from cluswasser.union_find import UnionFind
 
 
-def unify_by_wasser_distance(tree):
-    tree.clean_wasser_calc()
-    tree.sort_wasser()
-    return unify_wasser(tree)
-
-
-def unify_wasser(tree):
-    union_find = UnionFind(tree.point_array)
+def unify_wasser(tree, labels):
+    union_find = UnionFind(tree.features, labels)
 
     filtered_edges = []
     for edge in tree.edges:
@@ -42,11 +35,6 @@ def unify(point_array, filtered_edges):
             union_find.unify(edge.src, edge.dest, edge.wasser_cost)
 
     return union_find
-
-
-def reduce_to_significant(uf):
-    cluster_dict = create_cluster_by_size_decreasing(uf)
-    return cluster_dict
 
 
 def __wasser_cost_in_range(wasser_cost, error_range):
